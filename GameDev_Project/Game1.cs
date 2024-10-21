@@ -1,4 +1,4 @@
-﻿using GameDev_Project;
+﻿using GameDev_Project.Characters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

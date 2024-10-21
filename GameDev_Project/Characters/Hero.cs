@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using GameDev_Project.Interfaces;
 using GameDev_Project.AnimationLogic;
 
-namespace GameDev_Project
+namespace GameDev_Project.Characters
 {
 
-    public class Hero:IGameObject
+    public class Hero : IGameObject
     {
         Texture2D heroTexture;
         Animation animation;
@@ -31,7 +31,7 @@ namespace GameDev_Project
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(heroTexture, new Vector2(0, 0),animation.CurrentFrame.SourceRectangle, Color.White);
+            spriteBatch.Draw(heroTexture, new Vector2(0, 0), animation.CurrentFrame.SourceRectangle, Color.White);
         }
     }
 }
