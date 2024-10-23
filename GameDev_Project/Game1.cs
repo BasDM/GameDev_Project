@@ -1,11 +1,10 @@
 ﻿using GameDev_Project.Characters;
+using GameDev_Project.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Data;
 
-namespace Pong
+namespace GameDev_Project
 {
     public class Game1 : Game
     {
@@ -41,13 +40,17 @@ namespace Pong
 
         private void InitializeGameObjects()
         {
-            hero = new Hero(texture);
+            hero = new Hero(texture, new KeyboardReader());
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                hero.ChangeInput(new KeyboardReader());
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                hero.ChangeInput(new MouseReader());
 
             // TODO: Add your update logic here
             hero.Update(gameTime);
@@ -66,6 +69,5 @@ namespace Pong
 
             base.Draw(gameTime);
         }
-
     }
 }
