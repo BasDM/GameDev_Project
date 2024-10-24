@@ -34,7 +34,6 @@ namespace GameDev_Project
 
             // TODO: use this.Content to load your game content here
             texture = Content.Load<Texture2D>("Goblin Mech Rider Sprite Sheet");
-
             InitializeGameObjects();
         }
 
