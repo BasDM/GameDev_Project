@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameDev_Project.Characters
 {
-
     public class Hero : IGameObject
     {
         Texture2D heroTexture;
@@ -55,7 +54,10 @@ namespace GameDev_Project.Characters
         {
             var direction = inputReader.ReadInput();
             direction *= _pace;
-            _position += direction;
+            if (_position.X + direction.X > 0 && _position.X + direction.X < 800 - 160)
+                _position.X += direction.X;
+            if (_position.Y + direction.Y > 0 && _position.Y + direction.Y < 480 - 96)
+                _position.Y += direction.Y;
         }
 
         public void Draw(SpriteBatch spriteBatch)
