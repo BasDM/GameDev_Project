@@ -22,7 +22,7 @@ namespace GameDev_Project.GameComponents
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(boundingBoxTexture, new Rectangle((int)position.X, (int)position.Y, 160, 96), Color.White);
+            spriteBatch.Draw(boundingBoxTexture, boundingBox, Color.White);
         }
 
 

@@ -32,7 +32,7 @@ namespace GameDev_Project.Characters
             this.inputReader = inputReader;
             boundingBoxTexture = new Texture2D(graphicsDevice,1,1);
             boundingBoxTexture.SetData(new[] { Color.White });
-            boundingBox = new Rectangle((int)position.X, (int)position.Y, 130, 96);
+            boundingBox = new Rectangle((int)position.X, (int)position.Y, 130, 60);
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -56,7 +56,7 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
-            boundingBox = new Rectangle((int)position.X,(int)position.Y, 130, 96);
+            boundingBox = new Rectangle((int)position.X,(int)position.Y, 130, 60);
         }
 
         private void Move()
