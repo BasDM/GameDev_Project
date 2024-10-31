@@ -1,7 +1,6 @@
 ﻿using GameDev_Project.Interfaces;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using System.IO;
+using Microsoft.Xna.Framework.Input;
 
 namespace GameDev_Project.Input
 {

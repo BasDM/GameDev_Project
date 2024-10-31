@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.Interfaces
 {
-    internal interface IGameObject
+    public interface IMovableObject : ICollide
     {
         void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
+
+
     }
 }

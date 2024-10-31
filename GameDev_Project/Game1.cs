@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.Characters;
+using GameDev_Project.GameComponents;
 using GameDev_Project.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,12 +9,14 @@ namespace GameDev_Project
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Texture2D texture;
+        Texture2D texture;
         Hero hero;
 
+        Block whiteBox;
+        Color backgroundColor = Color.CornflowerBlue;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -34,16 +37,21 @@ namespace GameDev_Project
 
             // TODO: use this.Content to load your game content here
             texture = Content.Load<Texture2D>("Goblin Mech Rider Sprite Sheet");
+            whiteBox = new Block(GraphicsDevice,new Vector2(400,240));
             InitializeGameObjects();
         }
 
         private void InitializeGameObjects()
         {
-            hero = new Hero(texture, new KeyboardReader());
+            hero = new Hero(texture, new KeyboardReader(),GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            if (hero.Intersects(whiteBox))
+            {
+                backgroundColor = Color.Black;
+            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -59,10 +67,11 @@ namespace GameDev_Project
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(backgroundColor);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+            whiteBox.Draw(_spriteBatch);
             hero.Draw(_spriteBatch);
             _spriteBatch.End();
 
