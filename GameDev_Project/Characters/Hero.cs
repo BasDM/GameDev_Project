@@ -7,7 +7,7 @@ namespace GameDev_Project.Characters
 {
     public class Hero : IMovableObject
     {
-        private bool debug = true;
+        private bool debug = false;
         Texture2D heroTexture;
         Animation currentAnimation;
         Animation walkingAnimation;
@@ -32,7 +32,7 @@ namespace GameDev_Project.Characters
             this.inputReader = inputReader;
             boundingBoxTexture = new Texture2D(graphicsDevice,1,1);
             boundingBoxTexture.SetData(new[] { Color.White });
-            boundingBox = new Rectangle((int)position.X, (int)position.Y, 160, 96);
+            boundingBox = new Rectangle((int)position.X, (int)position.Y, 130, 96);
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -56,6 +56,7 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
+            boundingBox = new Rectangle((int)position.X,(int)position.Y, 130, 96);
         }
 
         private void Move()
@@ -72,7 +73,7 @@ namespace GameDev_Project.Characters
         {
             if (debug)
             {
-                spriteBatch.Draw(boundingBoxTexture, new Rectangle((int)position.X, (int)position.Y, 160, 96), Color.Red);
+                spriteBatch.Draw(boundingBoxTexture, boundingBox, Color.Red);
             }
             spriteBatch.Draw(heroTexture, new Rectangle((int)position.X,(int)position.Y,160,96), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0,0),horizontalFlip,0f);
         }

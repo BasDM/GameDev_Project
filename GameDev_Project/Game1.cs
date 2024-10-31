@@ -4,6 +4,7 @@ using GameDev_Project.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GameDev_Project
 {
@@ -17,6 +18,8 @@ namespace GameDev_Project
 
         Block whiteBox;
         Color backgroundColor = Color.CornflowerBlue;
+
+        List<Block> blocks = new List<Block>();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -48,16 +51,22 @@ namespace GameDev_Project
 
         protected override void Update(GameTime gameTime)
         {
-            if (hero.Intersects(whiteBox))
-            {
+            if (hero.Intersects(whiteBox)){
                 backgroundColor = Color.Black;
             }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            else{
+                backgroundColor = Color.CornflowerBlue;
+            }
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)){
                 Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter)){
                 hero.ChangeInput(new KeyboardReader());
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            }
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed){
                 hero.ChangeInput(new MouseReader());
+            }
 
             // TODO: Add your update logic here
             hero.Update(gameTime);
