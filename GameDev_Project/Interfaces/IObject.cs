@@ -5,7 +5,7 @@ namespace GameDev_Project.Interfaces
 {
     public interface IObject
     {
-        Vector2 position{ get; set; }
+        Vector2 Position{ get; set; }
         public void Draw(SpriteBatch spriteBatch);
     }
 }

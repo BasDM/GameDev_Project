@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.Characters
 {
-    public class Hero : IMovableObject
+    public class Hero : Character, IMovableObject
     {
         private bool debug = false;
         Texture2D heroTexture;
@@ -18,21 +18,16 @@ namespace GameDev_Project.Characters
         private IInputReader inputReader;
         private SpriteEffects horizontalFlip = SpriteEffects.None;
 
-        public Rectangle boundingBox { get; set; }
-        
-        public Texture2D boundingBoxTexture { get; set; }
-        public Vector2 position { get; set; } = new Vector2(0, 0);
-
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
-            position = new Vector2(1, 1);
+            Position = new Vector2(1, 1);
             _pace = new Vector2(1, 1);
 
             heroTexture = texture;
             this.inputReader = inputReader;
-            boundingBoxTexture = new Texture2D(graphicsDevice,1,1);
-            boundingBoxTexture.SetData(new[] { Color.White });
-            boundingBox = new Rectangle((int)position.X, (int)position.Y, 130, 60);
+            Texture = new Texture2D(graphicsDevice,1,1);
+            Texture.SetData(new[] { Color.White });
+            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, 130, 60);
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -56,26 +51,26 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
-            boundingBox = new Rectangle((int)position.X,(int)position.Y, 130, 60);
+            BoundingBox = new Rectangle((int)Position.X,(int)Position.Y, 130, 60);
         }
 
         private void Move()
         {
             var direction = inputReader.ReadInput();
             direction *= _pace;
-            if (position.X + direction.X > 0 && position.X + direction.X < 800 - 160)
-                position = new Vector2(position.X + direction.X, position.Y);
-            if (position.Y + direction.Y > 0 && position.Y + direction.Y < 480 - 96)
-                position = new Vector2(position.X, position.Y + direction.Y);
+            if (Position.X + direction.X > 0 && Position.X + direction.X < 800 - 160)
+                Position = new Vector2(Position.X + direction.X, Position.Y);
+            if (Position.Y + direction.Y > 0 && Position.Y + direction.Y < 480 - 96)
+                Position = new Vector2(Position.X, Position.Y + direction.Y);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             if (debug)
             {
-                spriteBatch.Draw(boundingBoxTexture, boundingBox, Color.Red);
+                spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)position.X,(int)position.Y,160,96), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0,0),horizontalFlip,0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X,(int)Position.Y,160,96), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0,0),horizontalFlip,0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
@@ -114,8 +109,7 @@ namespace GameDev_Project.Characters
 
         public bool Intersects(ICollide other)
         {
-            bool isIntersecting =  boundingBox.Intersects(other.boundingBox);
-            return isIntersecting;
+            return BoundingBox.Intersects(other.BoundingBox);
         }
     }
 }
