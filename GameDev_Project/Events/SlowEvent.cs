@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameDev_Project.Interfaces;
+using System;
 
 namespace GameDev_Project.Events
 {
-    public class SlowEvent : CollideWithEvent
+    public class SlowEvent : ICollideWithEvent
     {
+        public void Execute()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

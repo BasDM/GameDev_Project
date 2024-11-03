@@ -5,9 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.Characters
 {
-    public class Hero : Character, IMovableObject
+    public class Hero : Character, IGameObject
     {
-        private bool debug = false;
         Texture2D heroTexture;
         Animation currentAnimation;
         Animation walkingAnimation;
@@ -18,6 +17,9 @@ namespace GameDev_Project.Characters
         private IInputReader inputReader;
         private SpriteEffects horizontalFlip = SpriteEffects.None;
 
+        private int width = 160;
+        private int height = 96;
+
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
             Position = new Vector2(1, 1);
@@ -27,7 +29,7 @@ namespace GameDev_Project.Characters
             this.inputReader = inputReader;
             Texture = new Texture2D(graphicsDevice,1,1);
             Texture.SetData(new[] { Color.White });
-            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, 130, 60);
+            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, width, height);
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -39,19 +41,21 @@ namespace GameDev_Project.Characters
             Move();
             if (inputReader.ReadInput().X == 0 && inputReader.ReadInput().Y == 0)
                 currentAnimation = idleAnimation;
-            if (inputReader.ReadInput().X == 1)
+            else
             {
                 currentAnimation = walkingAnimation;
-                horizontalFlip = SpriteEffects.None;
-            }
-            else if (inputReader.ReadInput().X == -1)
-            {
-                currentAnimation = walkingAnimation;
-                horizontalFlip = SpriteEffects.FlipHorizontally;
+                if (inputReader.ReadInput().X == -1)
+                {
+                    horizontalFlip = SpriteEffects.FlipHorizontally;
+                }
+                else
+                {
+                    horizontalFlip = SpriteEffects.None;
+                }
             }
 
             currentAnimation.Update(gameTime);
-            BoundingBox = new Rectangle((int)Position.X,(int)Position.Y, 130, 60);
+            BoundingBox = new Rectangle((int)Position.X,(int)Position.Y, width, height);
         }
 
         private void Move()
@@ -70,7 +74,7 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X,(int)Position.Y,160,96), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0,0),horizontalFlip,0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X,(int)Position.Y,width,height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0,0),horizontalFlip,0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
@@ -81,33 +85,33 @@ namespace GameDev_Project.Characters
         public void AddWalkingAnimation()
         {
             walkingAnimation = new Animation();
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(320, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(480, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(640, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(800, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(960, 96, 160, 96)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(1120, 96, 160, 96)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(320, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(480, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(640, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(800, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(960, 96, width, height)));
+            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(1120, 96, width, height)));
         }
         public void AddIdleAnimation()
         {
             idleAnimation = new Animation();
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 0, 160, 96)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 0, 160, 96)));
+            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 0, width, height)));
+            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 0, width, height)));
         }
         public void AddDeathAnimation()
         {
             deathAnimation = new Animation();
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 384, 160, 96)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 384, 160, 96)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(320, 384, 160, 96)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(480, 384, 160, 96)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(640, 384, 160, 96)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(800, 384, 160, 96)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 384, width, height)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(160, 384, width, height)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(320, 384, width, height)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(480, 384, width, height)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(640, 384, width, height)));
+            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(800, 384, width, height)));
         }
 
-        public bool Intersects(ICollide other)
+        public bool Intersects(IGameObject other)
         {
             return BoundingBox.Intersects(other.BoundingBox);
         }

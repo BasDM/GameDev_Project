@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameDev_Project.Interfaces;
+using System;
 
 namespace GameDev_Project.Events
 {
-    public class DamageEvent : CollideWithEvent
+    public class DamageEvent : ICollideWithEvent
     {
         public int Damage { get; set; }
 
         public DamageEvent(int damage)
         {
             Damage = damage;
+        }
+
+        public void Execute()
+        {
+            throw new NotImplementedException();
         }
     }
 }

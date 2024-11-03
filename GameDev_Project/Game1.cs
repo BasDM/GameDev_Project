@@ -17,7 +17,6 @@ namespace GameDev_Project
         Texture2D texture;
         Hero hero;
 
-        Block whiteBox;
         Color backgroundColor = Color.CornflowerBlue;
         List<Block> blocks = new List<Block>();
         int[,] gameBoard = new int[,]
@@ -53,7 +52,6 @@ namespace GameDev_Project
 
             // TODO: use this.Content to load your game content here
             texture = Content.Load<Texture2D>("Goblin Mech Rider Sprite Sheet");
-            whiteBox = new Block(400,240,GraphicsDevice);
             InitializeGameObjects();
         }
 
@@ -64,15 +62,6 @@ namespace GameDev_Project
 
         protected override void Update(GameTime gameTime)
         {
-            if (hero.Intersects(whiteBox))
-            {
-                backgroundColor = Color.Black;
-            }
-            else
-            {
-                backgroundColor = Color.CornflowerBlue;
-            }
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -98,12 +87,11 @@ namespace GameDev_Project
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            whiteBox.Draw(_spriteBatch);
-            hero.Draw(_spriteBatch);
             foreach (var item in blocks)
             {
                 item.Draw(_spriteBatch);
             }
+            hero.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -115,7 +103,7 @@ namespace GameDev_Project
             {
                 for (int k = 0; k < gameBoard.GetLength(1); k++)
                 {
-                    blocks.Add(BlockFactory.CreateBlock(gameBoard[l, k]));
+                    blocks.Add(BlockFactory.CreateBlockWithInt(gameBoard[l, k], k, l,GraphicsDevice));
                 }
             }
         }

@@ -13,6 +13,7 @@ namespace GameDev_Project.GameComponents
             Passable = true;
             Color = Color.Black;
             Texture = new Texture2D(graphics, 1, 1);
+            Texture.SetData(new[] { Color.White });
             Damage = 10;
             CollideWithEvent = new DamageEvent(Damage);
         }

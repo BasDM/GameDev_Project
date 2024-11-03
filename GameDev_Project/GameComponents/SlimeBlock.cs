@@ -8,10 +8,11 @@ namespace GameDev_Project.GameComponents
     {
         public SlimeBlock(int x, int y, GraphicsDevice graphics) : base(x,y,graphics)
         {
-            BoundingBox = new Rectangle(x, y, 10, 10);
+            BoundingBox = new Rectangle(x, y, 100, 50);
             Passable = true;
             Color = Color.GreenYellow;
             Texture = new Texture2D(graphics, 1, 1);
+            Texture.SetData(new[] { Color.White });
             CollideWithEvent = new SlowEvent();
         }
     }
