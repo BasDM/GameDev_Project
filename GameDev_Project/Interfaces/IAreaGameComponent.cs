@@ -9,6 +9,5 @@ namespace GameDev_Project.Interfaces
         Rectangle BoundingBox { get; set; }
         Texture2D Texture { get; set; }
         void Draw(SpriteBatch spriteBatch);
-        bool Intersects(IGameObject other);
     }
 }

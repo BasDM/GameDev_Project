@@ -1,8 +1,9 @@
-﻿using GameDev_Project.Characters;
-using GameDev_Project.Events;
-using GameDev_Project.Interfaces;
+﻿using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace GameDev_Project.GameComponents
 {
@@ -13,7 +14,7 @@ namespace GameDev_Project.GameComponents
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
-        public ICollidable CollidingWith { get; set; }
+
 
         public Block(int x, int y, GraphicsDevice graphics)
         {
@@ -29,9 +30,17 @@ namespace GameDev_Project.GameComponents
             spriteBatch.Draw(Texture, BoundingBox, Color);
         }
 
-        public bool Intersects(IGameObject other)
+        public bool Intersects(ICollidable other)
         {
             return BoundingBox.Intersects(other.BoundingBox);
+        }
+
+        
+        public void HandleCollision(ICollidable collidable)
+        {
+            //Different per block, implement in specific type
+            Debug.WriteLine("STOP TOUCHING MEEEE!!!");
+
         }
     }
 }

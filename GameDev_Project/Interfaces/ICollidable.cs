@@ -1,7 +1,11 @@
-﻿namespace GameDev_Project.Interfaces
+﻿using Microsoft.Xna.Framework;
+using System;
+
+namespace GameDev_Project.Interfaces
 {
     public interface ICollidable
     {
-        public ICollidable CollidingWith { get; set; }
+        Rectangle BoundingBox { get; set; }
+        void HandleCollision(ICollidable other);
     }
 }
