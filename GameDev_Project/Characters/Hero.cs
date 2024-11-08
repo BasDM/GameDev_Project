@@ -61,6 +61,7 @@ namespace GameDev_Project.Characters
         private void Move()
         {
             var direction = inputReader.ReadInput();
+            if(Intersects())
             direction *= _pace;
             if (Position.X + direction.X > 0 && Position.X + direction.X < 800 - 160)
                 Position = new Vector2(Position.X + direction.X, Position.Y);

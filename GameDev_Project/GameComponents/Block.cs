@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.GameComponents
 {
-    public class Block : IAreaGameComponent
+    public class Block : IAreaGameComponent,ICollideWithEvent
     {
         public Rectangle BoundingBox { get; set; }
         public bool Passable { get; set; }
@@ -35,10 +35,19 @@ namespace GameDev_Project.GameComponents
             return BoundingBox.Intersects(other.BoundingBox);
         }
 
-        public virtual void IsCollideWithEvent(Character collider)
+        public void registerObserver()
         {
-            CollideWithEvent.Execute();
+            throw new System.NotImplementedException();
         }
 
+        public void removeObserver()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void notifyObservers()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

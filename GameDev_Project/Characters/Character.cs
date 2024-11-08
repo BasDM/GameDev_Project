@@ -1,11 +1,16 @@
 ﻿using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameDev_Project.Characters
 {
-    public class Character:IGameObject
+    public class Character:IGameObject,ICollideWithEvent
     {
+        private List<Character> observers;
+        public IInputReader inputReader;
+
         public bool debug = true;
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
@@ -13,15 +18,30 @@ namespace GameDev_Project.Characters
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new System.NotImplementedException();
+            spriteBatch.Draw(Texture, BoundingBox, Color.White);
         }
 
         public bool Intersects(IGameObject other)
         {
+            return BoundingBox.Intersects(other.BoundingBox);
+        }
+
+        public void Update(GameTime gametime)
+        {
+
+        }
+
+        public void notifyObservers()
+        {
             throw new System.NotImplementedException();
         }
 
-        public void Update(GameTime gameTime)
+        public void registerObserver()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void removeObserver()
         {
             throw new System.NotImplementedException();
         }

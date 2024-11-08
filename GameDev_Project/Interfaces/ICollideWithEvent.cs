@@ -2,6 +2,9 @@
 {
     public interface ICollideWithEvent
     {
-        public void Execute();
+        //ICollideWithEvent is a subject
+        public void registerObserver();
+        public void removeObserver();
+        public void notifyObservers();
     }
 }
