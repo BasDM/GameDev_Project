@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using GameDev_Project.Factories;
+using GameDev_Project.Events;
 
 namespace GameDev_Project
 {
@@ -22,6 +23,7 @@ namespace GameDev_Project
         Texture2D blockTexture;
         Texture2D slimeBlockTexture;
         Texture2D trapBlockTexture;
+        CollisionHandler collisionHandler;
 
         int[,] gameBoard = new int[,]
         {
@@ -55,7 +57,7 @@ namespace GameDev_Project
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            texture = Content.Load<Texture2D>("Goblin Mech Rider Sprite Sheet");
+            texture = Content.Load<Texture2D>("NightBorne");
             //blockTexture = Content.Load<Texture2D>(" ");
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
@@ -65,6 +67,8 @@ namespace GameDev_Project
         private void InitializeGameObjects()
         {
             hero = new Hero(texture, new KeyboardReader(), GraphicsDevice);
+            collisionHandler = new CollisionHandler();
+            collisionHandler.AddCharacter(hero);
         }
 
         protected override void Update(GameTime gameTime)
@@ -84,7 +88,7 @@ namespace GameDev_Project
 
             // TODO: Add your update logic here
             hero.Update(gameTime);
-
+            collisionHandler.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -112,6 +116,11 @@ namespace GameDev_Project
                 {
                     blocks.Add(BlockFactory.CreateBlockWithInt(gameBoard[l, k], k, l,GraphicsDevice));
                 }
+            }
+
+            foreach (var block in blocks)
+            {
+                collisionHandler.AddCollidable(block);
             }
         }
     }

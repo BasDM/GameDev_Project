@@ -7,8 +7,8 @@ namespace GameDev_Project.Events
 {
     public class CollisionHandler
     {   
-        private List<ICollidable> collidableList;
-        private List<Character> characters;
+        private List<ICollidable> collidableList = new List<ICollidable>();
+        private List<Character> characters = new List<Character>();
         
         public void Update(GameTime gameTime)
         {
