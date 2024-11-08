@@ -19,6 +19,10 @@ namespace GameDev_Project
 
         Color backgroundColor = Color.CornflowerBlue;
         List<Block> blocks = new List<Block>();
+        Texture2D blockTexture;
+        Texture2D slimeBlockTexture;
+        Texture2D trapBlockTexture;
+
         int[,] gameBoard = new int[,]
         {
             { 1,1,1,1,1,1,1,1 },
@@ -52,6 +56,9 @@ namespace GameDev_Project
 
             // TODO: use this.Content to load your game content here
             texture = Content.Load<Texture2D>("Goblin Mech Rider Sprite Sheet");
+            //blockTexture = Content.Load<Texture2D>(" ");
+            //slimeBlockTexture = Content.Load<Texture2D>(" ");
+            //trapBlockTexture = Content.Load<Texture2D>(" ");
             InitializeGameObjects();
         }
 

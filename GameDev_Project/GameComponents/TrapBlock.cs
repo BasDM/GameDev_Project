@@ -9,12 +9,6 @@ namespace GameDev_Project.GameComponents
         public int Damage { get; set; }
         public TrapBlock(int x, int y, GraphicsDevice graphics) : base(x, y, graphics)
         {
-            BoundingBox = new Rectangle(x, y, 10, 10);
-            Passable = true;
-            Color = Color.Black;
-            Texture = new Texture2D(graphics, 1, 1);
-            Texture.SetData(new[] { Color.White });
-            Damage = 10;
             CollideWithEvent = new DamageEvent(Damage);
         }
     }

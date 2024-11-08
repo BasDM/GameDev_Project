@@ -1,6 +1,7 @@
 ﻿using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -30,18 +31,17 @@ namespace GameDev_Project.Characters
         {
 
         }
-
-        public void notifyObservers()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void registerObserver()
         {
-            throw new System.NotImplementedException();
+            observers.Add(this);
         }
 
         public void removeObserver()
+        {
+            int i = observers.IndexOf(this);
+
+        }
+        public void notifyObservers()
         {
             throw new System.NotImplementedException();
         }

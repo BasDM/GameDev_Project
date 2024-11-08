@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.GameComponents
 {
-    public class Block : IAreaGameComponent,ICollideWithEvent
+    public class Block : IAreaGameComponent
     {
         public Rectangle BoundingBox { get; set; }
         public bool Passable { get; set; }
@@ -14,6 +14,7 @@ namespace GameDev_Project.GameComponents
         public Texture2D Texture { get; set; }
         public ICollideWithEvent CollideWithEvent { get; set; }
         public Vector2 Position { get; set; }
+        public bool IsColliding { get; set; }
 
         public Block(int x, int y, GraphicsDevice graphics)
         {
@@ -33,21 +34,6 @@ namespace GameDev_Project.GameComponents
         public bool Intersects(IGameObject other)
         {
             return BoundingBox.Intersects(other.BoundingBox);
-        }
-
-        public void registerObserver()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void removeObserver()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void notifyObservers()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

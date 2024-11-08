@@ -61,11 +61,15 @@ namespace GameDev_Project.Characters
         private void Move()
         {
             var direction = inputReader.ReadInput();
-            if(Intersects())
+            var nextPositionX = Position.X + direction.X;
+            var nextPositionY = Position.Y + direction.Y;
+
+            //if (Check intersect) { };
+
             direction *= _pace;
-            if (Position.X + direction.X > 0 && Position.X + direction.X < 800 - 160)
+            if (nextPositionX > 0 && nextPositionX < 800 - 160)
                 Position = new Vector2(Position.X + direction.X, Position.Y);
-            if (Position.Y + direction.Y > 0 && Position.Y + direction.Y < 480 - 96)
+            if (nextPositionY > 0 && nextPositionY < 480 - 96)
                 Position = new Vector2(Position.X, Position.Y + direction.Y);
         }
 
