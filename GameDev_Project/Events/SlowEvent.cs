@@ -3,11 +3,8 @@ using System;
 
 namespace GameDev_Project.Events
 {
-    public class SlowEvent : ICollideWithEvent
+    public class SlowEvent
     {
-        public void Execute()
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

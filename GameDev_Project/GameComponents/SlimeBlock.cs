@@ -8,7 +8,7 @@ namespace GameDev_Project.GameComponents
     {
         public SlimeBlock(int x, int y, GraphicsDevice graphics) : base(x,y,graphics)
         {
-            CollideWithEvent = new SlowEvent();
+            
         }
     }
 }

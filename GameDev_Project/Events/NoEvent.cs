@@ -3,11 +3,8 @@ using System;
 
 namespace GameDev_Project.Events
 {
-    public class NoEvent : ICollideWithEvent
+    public class NoEvent
     {
-        public void Execute()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

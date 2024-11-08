@@ -7,15 +7,16 @@ using System.Diagnostics;
 
 namespace GameDev_Project.Characters
 {
-    public class Character:IGameObject,ICollideWithEvent
+    public class Character:IGameObject,ICollidable
     {
-        private List<Character> observers;
         public IInputReader inputReader;
 
-        public bool debug = true;
+        public bool debug = false;
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; } = new Vector2(0, 0);
+        public bool IsColliding { get; set; }
+        public ICollidable CollidingWith { get;set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -30,20 +31,6 @@ namespace GameDev_Project.Characters
         public void Update(GameTime gametime)
         {
 
-        }
-        public void registerObserver()
-        {
-            observers.Add(this);
-        }
-
-        public void removeObserver()
-        {
-            int i = observers.IndexOf(this);
-
-        }
-        public void notifyObservers()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

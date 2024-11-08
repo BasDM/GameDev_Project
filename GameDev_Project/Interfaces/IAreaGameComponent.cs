@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDev_Project.Interfaces
 {
-    public interface IAreaGameComponent
+    public interface IAreaGameComponent:ICollidable
     {
         Vector2 Position { get; set; }
         Rectangle BoundingBox { get; set; }

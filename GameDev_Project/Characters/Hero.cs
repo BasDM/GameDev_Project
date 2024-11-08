@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.AnimationLogic;
+using GameDev_Project.GameComponents;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,7 +65,7 @@ namespace GameDev_Project.Characters
             var nextPositionX = Position.X + direction.X;
             var nextPositionY = Position.Y + direction.Y;
 
-            //if (Check intersect) { };
+            //if(this.Intersects())
 
             direction *= _pace;
             if (nextPositionX > 0 && nextPositionX < 800 - 160)

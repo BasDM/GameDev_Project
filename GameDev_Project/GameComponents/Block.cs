@@ -12,9 +12,9 @@ namespace GameDev_Project.GameComponents
         public bool Passable { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
-        public ICollideWithEvent CollideWithEvent { get; set; }
+        public ICollidable CollideWithEvent { get; set; }
         public Vector2 Position { get; set; }
-        public bool IsColliding { get; set; }
+        public ICollidable CollidingWith { get; set; }
 
         public Block(int x, int y, GraphicsDevice graphics)
         {
@@ -23,7 +23,6 @@ namespace GameDev_Project.GameComponents
             Color = Color.Green;
             Texture = new Texture2D(graphics, 1, 1);
             Texture.SetData(new[] { Color.White });
-            CollideWithEvent = new NoEvent();
         }
 
         public void Draw(SpriteBatch spriteBatch)
