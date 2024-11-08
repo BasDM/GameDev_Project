@@ -12,7 +12,6 @@ namespace GameDev_Project.GameComponents
         public bool Passable { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
-        public ICollidable CollideWithEvent { get; set; }
         public Vector2 Position { get; set; }
         public ICollidable CollidingWith { get; set; }
 

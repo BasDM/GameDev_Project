@@ -1,4 +1,5 @@
-﻿using GameDev_Project.Interfaces;
+﻿using GameDev_Project.Characters;
+using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -13,7 +14,7 @@ namespace GameDev_Project.Events
     {
         private List<ICollidable> collidableList;
         
-        public void HandleCollision(ICollidable currentEvent)
+        public void HandleCollision(ICollidable currentEvent, Hero hero)
         {
             int damage;
             int paceMultiplier = 0;
