@@ -1,12 +1,7 @@
 ﻿using GameDev_Project.Characters;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project.Events
 {
@@ -17,8 +12,15 @@ namespace GameDev_Project.Events
         
         public void Update(GameTime gameTime)
         {
-            //Detect for collisions
-            //TODO
+            foreach(Character c in characters){
+                foreach(ICollidable otherObject in collidableList)
+                {
+                    if (c.Intersects(otherObject))
+                    {
+                        notifyObservers(c, otherObject);
+                    }
+                }
+            }
             
         }
         public void AddCollidable(ICollidable collidable)

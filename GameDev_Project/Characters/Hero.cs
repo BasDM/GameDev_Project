@@ -2,6 +2,7 @@
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection.Metadata;
 
 namespace GameDev_Project.Characters
 {
@@ -13,16 +14,37 @@ namespace GameDev_Project.Characters
         Animation idleAnimation;
         Animation deathAnimation;
 
-        private Vector2 _pace;
+        private Vector2 _speed;
+        private Vector2 _acceleration;
         private IInputReader inputReader;
         private SpriteEffects horizontalFlip = SpriteEffects.None;
 
         private int width = 160;
         private int height = 96;
+        private Vector2 Limit(Vector2 v, float min, float max)
+        {
+            float length = v.Length();
+
+            if (length > max)
+            {
+                float ratio = max / length;
+                v.X *= ratio;
+                v.Y *= ratio;
+            }
+            else if (length < min && length > 0)
+            {
+                float ratio = min / length;
+                v.X *= ratio;
+                v.Y *= ratio;
+            }
+
+            return v;
+        }
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
             Position = new Vector2(1, 1);
-            _pace = new Vector2(1, 1);
+            _speed = new Vector2(0, 0);
+            _acceleration = new Vector2(0.1f, 0.1f);
 
             heroTexture = texture;
             this.inputReader = inputReader;
@@ -35,7 +57,7 @@ namespace GameDev_Project.Characters
             AddDeathAnimation();
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Move();
             if (inputReader.ReadInput().X == 0 && inputReader.ReadInput().Y == 0)
@@ -60,20 +82,51 @@ namespace GameDev_Project.Characters
         private void Move()
         {
             var direction = inputReader.ReadInput();
-            var nextPositionX = Position.X + direction.X;
-            var nextPositionY = Position.Y + direction.Y;
 
-            //if (this.BoundingBox.Intersects(new Rectangle(170,0,160,96)/*other boundingbox*/))
-            //{
-            //    paceMultiplier = 0;
-            //}
-            //paceMultiplier = 1;
+            //slow down when no input
+            if(direction.X == 0)
+            {
+                _acceleration.X = 0;
+                //friction
+                _speed.X *= 0.9f;
+            }
 
-            direction *= _pace;
-            if (nextPositionX > 0 && nextPositionX < 800 - 160)
-                Position = new Vector2(Position.X + direction.X, Position.Y);
-            if (nextPositionY > 0 && nextPositionY < 480 - 96)
-                Position = new Vector2(Position.X, Position.Y + direction.Y);
+            if (direction.Y == 0)
+            {
+                _acceleration.Y = 0;
+                //friction
+                _speed.Y *= 0.9f;
+                
+            }
+
+            if (_speed.Length() < 0.01f) 
+                _speed = Vector2.Zero;
+
+
+
+            _acceleration += direction/600;
+            Limit(_acceleration,-0.07f,0.07f);
+
+            _speed += _acceleration;
+            Limit(_speed, -0.1f ,0.1f);
+
+
+            var nextPositionX = Position.X + _speed.X;
+            var nextPositionY = Position.Y + _speed.Y;
+
+
+            if (nextPositionX < 0 || nextPositionX > 800 - 160)
+            {
+                _speed.X = 0;
+            }
+
+            if (nextPositionY < 0 || nextPositionY > 480 - 96)
+            {
+                _speed.Y = 0;
+                
+            }
+
+            Position += _speed;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -122,6 +175,11 @@ namespace GameDev_Project.Characters
         public bool Intersects(IGameObject other)
         {
             return BoundingBox.Intersects(other.BoundingBox);
+        }
+
+        public override void HandleCollision(ICollidable other)
+        {
+            
         }
     }
 }

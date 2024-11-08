@@ -41,6 +41,8 @@ namespace GameDev_Project.GameComponents
             //Different per block, implement in specific type
             Debug.WriteLine("STOP TOUCHING MEEEE!!!");
 
+            //TODO change acceleration of character
+
         }
     }
 }

@@ -6,10 +6,11 @@ using System.Collections.Generic;
 
 namespace GameDev_Project.Characters
 {
-    public class Character : IGameObject, ICollidable
+    public abstract class Character : IGameObject, ICollidable
     {
         public IInputReader inputReader;
         public bool debug = false;
+        public int hp;
 
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
@@ -17,7 +18,6 @@ namespace GameDev_Project.Characters
         //collision
         public bool IsColliding { get; set; }
         public ICollidable CollidingWith { get; set; }
-        public event Action<ICollidable> OnCollision;
 
 
         public void Draw(SpriteBatch spriteBatch)
@@ -30,15 +30,10 @@ namespace GameDev_Project.Characters
             return BoundingBox.Intersects(other.BoundingBox);
         }
 
-        public void Update(GameTime gametime)
-        {
-           
-        }
+        public abstract void Update(GameTime gameTime);
 
-        public void HandleCollision(ICollidable other)
-        {
-            //TODO
-            throw new NotImplementedException();
-        }
+        public abstract void HandleCollision(ICollidable other);
+
+        
     }
 }
