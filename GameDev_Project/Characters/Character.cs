@@ -12,13 +12,16 @@ namespace GameDev_Project.Characters
         public bool debug = true;
         public int hp = 5;
 
+       
+
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; } = new Vector2(0, 0);
         //collision
         public bool IsColliding { get; set; }
         public ICollidable CollidingWith { get; set; }
-
+        public int width { get; set; }
+        public int height { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -34,6 +37,6 @@ namespace GameDev_Project.Characters
 
         public abstract void HandleCollision(ICollidable other);
 
-        
+        public abstract void HaltMovement(ICollidable other);
     }
 }

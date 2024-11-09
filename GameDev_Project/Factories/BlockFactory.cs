@@ -31,13 +31,12 @@ namespace GameDev_Project.Factories
             switch (type)
             {
                 case 0:
-                    newBlock = new EmptyBlock(x*100, y*50, graphics);
                     break;
                 case 1:
-                    newBlock = new Block(x*100, y*50, graphics);
+                    newBlock = new Block(x*100, y*80, graphics);
                     break;
                 case 2:
-                    newBlock = new SlimeBlock(x*100, y*50, graphics);
+                    newBlock = new SlimeBlock(x*100, y*80, graphics);
                     break;
                 default:
                     break;

@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.AnimationLogic;
+using GameDev_Project.GameComponents;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,8 +21,8 @@ namespace GameDev_Project.Characters
         private IInputReader inputReader;
         private SpriteEffects horizontalFlip = SpriteEffects.None;
 
-        private int width = 40;
-        private int height = 30;
+        private int width = 80;
+        private int height = 80;
         private Vector2 Limit(Vector2 v, float min, float max)
         {
             float length = v.Length();
@@ -43,7 +44,7 @@ namespace GameDev_Project.Characters
         }
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
-            Position = new Vector2(1, 1);
+            Position = new Vector2(20, 80);
             _speed = new Vector2(0, 0);
             _acceleration = new Vector2(0.1f, 0.1f);
 
@@ -51,7 +52,7 @@ namespace GameDev_Project.Characters
             this.inputReader = inputReader;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
-            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, width, height);
+            BoundingBox = new Rectangle((int)Position.X + 16, (int)Position.Y + 25, width - 50, height - 50);
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -77,7 +78,7 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
-            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, width, height);
+            BoundingBox = new Rectangle((int)Position.X + 16, (int)Position.Y + 25, width - 50, height - 50);
         }
 
         private void Move()
@@ -116,12 +117,12 @@ namespace GameDev_Project.Characters
             var nextPositionY = Position.Y + _speed.Y;
 
 
-            if (nextPositionX < 0 || nextPositionX > 800 - 160)
+            if (nextPositionX < 0 || nextPositionX > (800 - width))
             {
                 _speed.X = 0;
             }
 
-            if (nextPositionY < 0 || nextPositionY > 480 - 96)
+            if (nextPositionY < 0 || nextPositionY > (480 - height))
             {
                 _speed.Y = 0;
             }
@@ -135,7 +136,7 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width - 10, height - 10), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
@@ -146,35 +147,26 @@ namespace GameDev_Project.Characters
         public void AddWalkingAnimation()
         {
             walkingAnimation = new Animation();
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(0, height, width, height)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width, height, width, height)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 2, height, width, height)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 3, height, width, height)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 4, height, width, height)));
-            walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 5, height, width, height)));
+            for (int i = 0; i < 6; i++)
+            {
+                walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height, width, height)));
+            }
         }
         public void AddIdleAnimation()
         {
             idleAnimation = new Animation();
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(0, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*2, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*3, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*4, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*5, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*6, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*7, 0, width, height)));
-            idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width*8, 0, width, height)));
+            for (int i = 0; i < 9; i++)
+            {
+                idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, 0, width, height)));
+            }
         }
         public void AddDeathAnimation()
         {
             deathAnimation = new Animation();
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(0, height*4, width, height)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width, height*4, width, height)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 2, height*4, width, height)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 3, height*4, width, height)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 4, height*4, width, height)));
-            deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * 5, height*4, width, height)));
+            for (int i = 0; i < 22; i++)
+            {
+                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height*4, width, height)));
+            }
         }
 
         public bool Intersects(IGameObject other)
@@ -182,23 +174,41 @@ namespace GameDev_Project.Characters
             return BoundingBox.Intersects(other.BoundingBox);
         }
 
-        public override void HandleCollision(ICollidable other)
+        public override void HaltMovement(ICollidable other)
         {
             Vector2 collisionDirection = Position - other.Position;
             collisionDirection = Limit(collisionDirection, -1f, 1f);
 
+            //How much you need to be pushed back when colliding to not clip into the wall
+            Vector2 seperation = Vector2.Zero;
+            
+
             //Stop if collision in X direction
             if (Math.Abs(collisionDirection.X) > 0.1f)
             {
+                seperation.X = -_speed.X;
                 _speed.X *= 0;
                 _acceleration.X = 0;
-            }
+        }
 
             //Same thing but in Y direction
             if (Math.Abs(collisionDirection.Y) > 0.1f)
             {
+                seperation.Y = -_speed.Y;
                 _speed.Y *= 0;
                 _acceleration.Y = 0;
+
+            }
+
+            Position += seperation;
+
+        }
+
+        public override void HandleCollision(ICollidable other)
+        {
+            if(other is Block)
+            {
+                HaltMovement(other);
             }
         }
     }

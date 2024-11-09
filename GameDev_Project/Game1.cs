@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using GameDev_Project.Factories;
 using GameDev_Project.Events;
+using Microsoft.Xna.Framework.Content;
 
 namespace GameDev_Project
 {
@@ -114,7 +115,11 @@ namespace GameDev_Project
             {
                 for (int k = 0; k < gameBoard.GetLength(1); k++)
                 {
-                    blocks.Add(BlockFactory.CreateBlockWithInt(gameBoard[l, k], k, l,GraphicsDevice));
+                    int val = gameBoard[l, k];
+                    if (val != 0)
+                    {
+                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l, GraphicsDevice));
+                    }
                 }
             }
 
