@@ -17,7 +17,7 @@ namespace GameDev_Project.Events
                 {
                     if (c.Intersects(otherObject))
                     {
-                        notifyObservers(c, otherObject);
+                        NotifyObservers(c, otherObject);
                     }
                 }
             }
@@ -33,7 +33,7 @@ namespace GameDev_Project.Events
             characters.Add(character);
         }
 
-        public void removeCollidable(ICollidable collidable)
+        public void RemoveCollidable(ICollidable collidable)
         {
 
             int i = collidableList.IndexOf(collidable);
@@ -43,7 +43,7 @@ namespace GameDev_Project.Events
             }
         }
 
-        public void removeCharacter(Character character)
+        public void RemoveCharacter(Character character)
         {
             int i = characters.IndexOf(character);
             if (i >= 0)
@@ -52,10 +52,12 @@ namespace GameDev_Project.Events
             }
         }
 
-        public void notifyObservers(Character collidable, ICollidable collidingWith)
+        public void NotifyObservers(Character collidable, ICollidable collidingWith)
         {
             collidable.HandleCollision(collidingWith);
             collidingWith.HandleCollision(collidable);
         }
+
+
     }
 }

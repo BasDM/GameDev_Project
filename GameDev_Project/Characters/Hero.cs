@@ -2,6 +2,7 @@
 using GameDev_Project.GameComponents;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Runtime.InteropServices;
@@ -104,6 +105,7 @@ namespace GameDev_Project.Characters
             if (_speed.Length() < 0.01f)
                 _speed = Vector2.Zero;
 
+            //TODO add gravity
 
 
             _acceleration += direction / 600;
@@ -184,7 +186,7 @@ namespace GameDev_Project.Characters
             
 
             //Stop if collision in X direction
-            if (Math.Abs(collisionDirection.X) > 0.1f)
+            if (Math.Abs(collisionDirection.X) >= 0.1f)
             {
                 seperation.X = -_speed.X;
                 _speed.X *= 0;
@@ -192,7 +194,7 @@ namespace GameDev_Project.Characters
         }
 
             //Same thing but in Y direction
-            if (Math.Abs(collisionDirection.Y) > 0.1f)
+            if (Math.Abs(collisionDirection.Y) >= 0.1f)
             {
                 seperation.Y = -_speed.Y;
                 _speed.Y *= 0;
