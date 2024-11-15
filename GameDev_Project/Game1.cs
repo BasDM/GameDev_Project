@@ -9,6 +9,7 @@ using GameDev_Project.Factories;
 using GameDev_Project.Events;
 using Microsoft.Xna.Framework.Content;
 using GameDev_Project.UI;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameDev_Project
 {
@@ -27,6 +28,11 @@ namespace GameDev_Project
         Texture2D slimeBlockTexture;
         Texture2D trapBlockTexture;
         CollisionHandler collisionHandler;
+
+        //Sounds
+        private SoundEffect slashEffect;
+        private float soundEffectVolume = 0.25f;
+        private SoundEffectInstance slashEffectInstance;
 
         int[,] gameBoard = new int[,]
         {
@@ -49,21 +55,21 @@ namespace GameDev_Project
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             base.Initialize();
             CreateBlocks();
         }
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             texture = Content.Load<Texture2D>("NightBorne");
-            //blockTexture = Content.Load<Texture2D>(" ");
+            blockTexture = Content.Load<Texture2D>("Dungeon Tile Set");
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
+            slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
+
+            slashEffectInstance = slashEffect.CreateInstance();
             InitializeGameObjects();
         }
 
@@ -90,7 +96,16 @@ namespace GameDev_Project
                 hero.ChangeInput(new MouseReader());
             }
 
-            // TODO: Add your update logic here
+            //Attack sound effect
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                if(slashEffectInstance.State != SoundState.Playing)
+                {
+                    slashEffectInstance.Volume = soundEffectVolume;
+                    slashEffectInstance.Play();
+                }
+            }
+
             hero.Update(gameTime);
             collisionHandler.Update(gameTime);
             base.Update(gameTime);
@@ -100,7 +115,6 @@ namespace GameDev_Project
         {
             GraphicsDevice.Clear(backgroundColor);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin();
             foreach (var item in blocks)
             {

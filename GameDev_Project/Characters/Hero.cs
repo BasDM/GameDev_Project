@@ -16,6 +16,7 @@ namespace GameDev_Project.Characters
         Animation walkingAnimation;
         Animation idleAnimation;
         Animation deathAnimation;
+        Animation attackAnimation;
 
         private Vector2 _speed;
         private Vector2 _acceleration;
@@ -172,6 +173,15 @@ namespace GameDev_Project.Characters
             for (int i = 0; i < 22; i++)
             {
                 deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height*4, width, height)));
+            }
+        }
+
+        public void AddAttackAnimation()
+        {
+            attackAnimation = new Animation();
+            for (int i = 0; i < 12; i++)
+            {
+                attackAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height * 3, width, height)));
             }
         }
 
