@@ -10,6 +10,7 @@ using GameDev_Project.Events;
 using Microsoft.Xna.Framework.Content;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace GameDev_Project
 {
@@ -31,8 +32,12 @@ namespace GameDev_Project
 
         //Sounds
         private SoundEffect slashEffect;
-        private float soundEffectVolume = 0.25f;
+        private float soundEffectVolume = 0.40f;
         private SoundEffectInstance slashEffectInstance;
+
+        //Music
+        private Song themeSong;
+
 
         int[,] gameBoard = new int[,]
         {
@@ -68,6 +73,7 @@ namespace GameDev_Project
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
             slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
+            themeSong = Content.Load<Song>(@"music\dark8bitThemesong");
 
             slashEffectInstance = slashEffect.CreateInstance();
             InitializeGameObjects();
@@ -103,6 +109,21 @@ namespace GameDev_Project
                 {
                     slashEffectInstance.Volume = soundEffectVolume;
                     slashEffectInstance.Play();
+                }
+            }
+
+            //Play or pause music
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
+            {
+                if(MediaPlayer.State == MediaState.Playing)
+                {
+                    MediaPlayer.Stop();
+                }
+                else
+                {
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Volume = soundEffectVolume;
+                    MediaPlayer.Play(themeSong);
                 }
             }
 

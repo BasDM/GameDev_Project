@@ -113,7 +113,7 @@ namespace GameDev_Project.Characters
             //TODO add gravity
 
 
-            _acceleration += direction / 600;
+            _acceleration += direction / 900;
             Limit(_acceleration, -0.07f, 0.07f);
 
             _speed += _acceleration;
