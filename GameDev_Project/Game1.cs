@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using GameDev_Project.Factories;
 using GameDev_Project.Events;
 using Microsoft.Xna.Framework.Content;
+using GameDev_Project.UI;
 
 namespace GameDev_Project
 {
@@ -18,6 +19,7 @@ namespace GameDev_Project
 
         Texture2D texture;
         Hero hero;
+        UserInterface ui;
 
         Color backgroundColor = Color.CornflowerBlue;
         List<Block> blocks = new List<Block>();
@@ -70,6 +72,7 @@ namespace GameDev_Project
             hero = new Hero(texture, new KeyboardReader(), GraphicsDevice);
             collisionHandler = new CollisionHandler();
             collisionHandler.AddCharacter(hero);
+            //ui = new UserInterface(hero.maxHealth,heartTexture,heartWidth, heartHeight, heartBoundingBox);
         }
 
         protected override void Update(GameTime gameTime)
@@ -104,6 +107,7 @@ namespace GameDev_Project
                 item.Draw(_spriteBatch);
             }
             hero.Draw(_spriteBatch);
+            //ui.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
