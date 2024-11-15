@@ -18,6 +18,7 @@ namespace GameDev_Project
     {
         public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        Texture2D background;
 
         Texture2D texture;
         Hero hero;
@@ -78,9 +79,10 @@ namespace GameDev_Project
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
             slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
-            themeSong = Content.Load<Song>(@"music\dark8bitThemesong");
-
             slashEffectInstance = slashEffect.CreateInstance();
+            
+            themeSong = Content.Load<Song>(@"music\dark8bitThemesong");
+            background = Content.Load<Texture2D>("crystal_cave_background");
             InitializeGameObjects();
         }
 
