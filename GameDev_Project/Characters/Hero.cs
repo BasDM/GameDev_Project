@@ -55,6 +55,10 @@ namespace GameDev_Project.Characters
             Texture.SetData(new[] { Color.White });
             BoundingBox = new Rectangle((int)Position.X + 16, (int)Position.Y + 25, width - 50, height - 50);
 
+            //Health
+            health = 5;
+            maxHealth = health;
+
             AddWalkingAnimation();
             AddIdleAnimation();
             AddDeathAnimation();
@@ -191,7 +195,7 @@ namespace GameDev_Project.Characters
                 seperation.X = -_speed.X;
                 _speed.X *= 0;
                 _acceleration.X = 0;
-        }
+            }
 
             //Same thing but in Y direction
             if (Math.Abs(collisionDirection.Y) >= 0.1f)
@@ -199,7 +203,6 @@ namespace GameDev_Project.Characters
                 seperation.Y = -_speed.Y;
                 _speed.Y *= 0;
                 _acceleration.Y = 0;
-
             }
 
             Position += seperation;

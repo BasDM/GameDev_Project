@@ -57,7 +57,5 @@ namespace GameDev_Project.Events
             collidable.HandleCollision(collidingWith);
             collidingWith.HandleCollision(collidable);
         }
-
-
     }
 }
