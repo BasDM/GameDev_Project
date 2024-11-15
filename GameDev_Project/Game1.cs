@@ -35,6 +35,9 @@ namespace GameDev_Project
         private float soundEffectVolume = 0.40f;
         private SoundEffectInstance slashEffectInstance;
 
+        //Camera
+        
+
         //Music
         private Song themeSong;
 
@@ -56,12 +59,14 @@ namespace GameDev_Project
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _graphics.IsFullScreen = false;
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             CreateBlocks();
+
         }
 
         protected override void LoadContent()
@@ -69,7 +74,7 @@ namespace GameDev_Project
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             texture = Content.Load<Texture2D>("NightBorne");
-            blockTexture = Content.Load<Texture2D>("Dungeon Tile Set");
+            blockTexture = Content.Load<Texture2D>("BlockTexture");
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
             slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
