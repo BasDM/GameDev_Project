@@ -1,5 +1,7 @@
-﻿using GameDev_Project.Interfaces;
+﻿using GameDev_Project.Characters;
+using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -11,23 +13,28 @@ namespace GameDev_Project.UI
 {
     public class UserInterface
     {
-        public List<Heart> hearts { get; set; }
+        private Hero hero;
+        private ContentManager content;
+        private int heartWidth;
+        private int heartHeight;
+        private Vector2 heartPosition;
+        private Texture2D heartTexture;
 
-        public UserInterface(int amountOfHealth, Texture2D heartTexture, int heartWidth, int heartHeight, Vector2 heartPosition, Rectangle heartBoundingBox)
+        public UserInterface(Hero _hero, ContentManager _content, int _heartWidth, int _heartHeight, Vector2 _heartPosition)
         {
-            hearts = new List<Heart>();
-            for (int i = 0; i < amountOfHealth; i++)
-            {
-                hearts.Add(new Heart(heartTexture, heartWidth, heartHeight, heartPosition, heartBoundingBox));
-            }
+            hero = _hero;
+            heartTexture = _content.Load<Texture2D>("heart_16x16");
+            heartWidth = _heartWidth;
+            heartHeight = _heartHeight;
+            heartPosition = _heartPosition;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var heart in hearts)
+            for (int i = 0; i < hero.health; i++)
             {
+                UIElement heart = new UIElement(heartTexture, heartWidth, heartHeight, new Vector2(heartPosition.X + i * heartWidth, heartPosition.Y));
                 heart.Draw(spriteBatch);
-                heart.Position = new Vector2(heart.width, heart.Position.Y);
             }
         }
     }

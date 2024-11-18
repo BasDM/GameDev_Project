@@ -91,7 +91,7 @@ namespace GameDev_Project
             hero = new Hero(texture, new KeyboardReader(), GraphicsDevice);
             collisionHandler = new CollisionHandler();
             collisionHandler.AddCharacter(hero);
-            //ui = new UserInterface(hero.maxHealth,heartTexture,heartWidth, heartHeight, heartBoundingBox);
+            ui = new UserInterface(hero,Content,20, 20, new Vector2(10,10));
         }
 
         protected override void Update(GameTime gameTime)
@@ -149,7 +149,7 @@ namespace GameDev_Project
                 item.Draw(_spriteBatch);
             }
             hero.Draw(_spriteBatch);
-            //ui.Draw(_spriteBatch);
+            ui.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
