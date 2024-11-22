@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using GameDev_Project.AreaGameComponents;
 
 namespace GameDev_Project
 {
@@ -18,18 +19,24 @@ namespace GameDev_Project
     {
         public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        Texture2D background;
-
+        
         Texture2D texture;
         Hero hero;
         UserInterface ui;
 
+        //Tiles
         Color backgroundColor = Color.CornflowerBlue;
         List<Block> blocks = new List<Block>();
-        Texture2D blockTexture;
-        Texture2D slimeBlockTexture;
-        Texture2D trapBlockTexture;
+        public static Texture2D blockTexture;
+        public static Texture2D slimeBlockTexture;
+        public static Texture2D trapBlockTexture;
+        
         CollisionHandler collisionHandler;
+
+        //Background
+        public static Rectangle screen;
+        public static Texture2D backgroundTexture;
+        public Background background;
 
         //Sounds
         private SoundEffect slashEffect;
@@ -67,7 +74,6 @@ namespace GameDev_Project
         {
             base.Initialize();
             CreateBlocks();
-
         }
 
         protected override void LoadContent()
@@ -75,14 +81,15 @@ namespace GameDev_Project
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             texture = Content.Load<Texture2D>("NightBorne");
-            blockTexture = Content.Load<Texture2D>("BlockTexture");
+            blockTexture = Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
+            
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
+            backgroundTexture = Content.Load<Texture2D>("crystal_cave_background");
+
             slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
             slashEffectInstance = slashEffect.CreateInstance();
-            
             themeSong = Content.Load<Song>(@"music\dark8bitThemesong");
-            background = Content.Load<Texture2D>("crystal_cave_background");
             InitializeGameObjects();
         }
 
@@ -92,6 +99,8 @@ namespace GameDev_Project
             collisionHandler = new CollisionHandler();
             collisionHandler.AddCharacter(hero);
             ui = new UserInterface(hero,Content,20, 20, new Vector2(10,10));
+            background = new Background();
+            screen = new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height);
         }
 
         protected override void Update(GameTime gameTime)
@@ -143,7 +152,8 @@ namespace GameDev_Project
         {
             GraphicsDevice.Clear(backgroundColor);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            background.Draw(_spriteBatch, screen);
             foreach (var item in blocks)
             {
                 item.Draw(_spriteBatch);
@@ -164,7 +174,7 @@ namespace GameDev_Project
                     int val = gameBoard[l, k];
                     if (val != 0)
                     {
-                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l, GraphicsDevice));
+                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l));
                     }
                 }
             }

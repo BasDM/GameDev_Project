@@ -48,13 +48,13 @@ namespace GameDev_Project.Characters
         {
             Position = new Vector2(20, 80);
             _speed = new Vector2(0, 0);
-            _acceleration = new Vector2(0.1f, 0.1f);
+            _acceleration = new Vector2(0.9f, 0.9f);
 
             heroTexture = texture;
             this.inputReader = inputReader;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
-            BoundingBox = new Rectangle((int)Position.X + 16, (int)Position.Y + 25, width - 50, height - 50);
+            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
 
             //Health
             health = 5;
@@ -84,7 +84,7 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
-            BoundingBox = new Rectangle((int)Position.X + 16, (int)Position.Y + 25, width - 50, height - 50);
+            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
         }
 
         private void Move()
@@ -96,14 +96,14 @@ namespace GameDev_Project.Characters
             {
                 _acceleration.X = 0;
                 //friction
-                _speed.X *= 0.9f;
+                _speed.X *= 0.8f;
             }
 
             if (direction.Y == 0)
             {
                 _acceleration.Y = 0;
                 //friction
-                _speed.Y *= 0.9f;
+                _speed.Y *= 0.8f;
 
             }
 
@@ -124,12 +124,12 @@ namespace GameDev_Project.Characters
             var nextPositionY = Position.Y + _speed.Y;
 
 
-            if (nextPositionX < 0 || nextPositionX > (800 - width))
+            if (nextPositionX < 0 || nextPositionX > (Game1.screen.Width - width))
             {
                 _speed.X = 0;
             }
 
-            if (nextPositionY < 0 || nextPositionY > (480 - height))
+            if (nextPositionY < 0 || nextPositionY > (Game1.screen.Height - height))
             {
                 _speed.Y = 0;
             }
@@ -143,7 +143,7 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width - 10, height - 10), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
