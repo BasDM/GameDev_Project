@@ -9,6 +9,5 @@ namespace GameDev_Project.Interfaces
         int height{ get; set; }
         Vector2 Position { get; set; }
         Rectangle BoundingBox { get; set; }
-        void HandleCollision(ICollidable other);
     }
 }

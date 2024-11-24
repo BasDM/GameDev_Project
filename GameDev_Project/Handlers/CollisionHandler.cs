@@ -5,45 +5,36 @@ using System.Collections.Generic;
 
 namespace GameDev_Project.Events
 {
-    public class CollisionHandler
-    {   
-        private List<ICollidable> collidableList = new List<ICollidable>();
-        private List<Character> characters = new List<Character>();
-        
-        public void Update(GameTime gameTime)
+    public static class CollisionHandler
+    {
+        private static List<ICollidable> collidableList = new List<ICollidable>();
+        private static List<Character> characters = new List<Character>();
+
+        public static ICollidable? CollidingWithObject(Rectangle boundingBoxToCheck)
         {
-            foreach(Character c in characters){
-                foreach(ICollidable otherObject in collidableList)
-                {
-                    if (c.Intersects(otherObject))
-                    {
-                        NotifyObservers(c, otherObject);
-                    }
-                }
-            }
-            
+            return collidableList.Find(o => boundingBoxToCheck.Intersects(o.BoundingBox));
         }
-        public void AddCollidable(ICollidable collidable)
+        public static void AddCollidable(ICollidable collidable)
         {
             collidableList.Add(collidable);
         }
 
-        public void AddCharacter(Character character)
+        public static void AddCharacter(Character character)
         {
             characters.Add(character);
         }
 
-        public void RemoveCollidable(ICollidable collidable)
+        public static void RemoveCollidable(ICollidable collidable)
         {
 
             int i = collidableList.IndexOf(collidable);
-            if( i>=0)
+            if (i >= 0)
             {
                 collidableList.Remove(collidable);
             }
         }
 
-        public void RemoveCharacter(Character character)
+        public static void RemoveCharacter(Character character)
         {
             int i = characters.IndexOf(character);
             if (i >= 0)
@@ -52,10 +43,5 @@ namespace GameDev_Project.Events
             }
         }
 
-        public void NotifyObservers(Character collidable, ICollidable collidingWith)
-        {
-            collidable.HandleCollision(collidingWith);
-            collidingWith.HandleCollision(collidable);
-        }
     }
 }

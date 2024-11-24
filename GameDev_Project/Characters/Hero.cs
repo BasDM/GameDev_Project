@@ -1,11 +1,14 @@
 ﻿using GameDev_Project.AnimationLogic;
+using GameDev_Project.Events;
 using GameDev_Project.GameComponents;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 
 namespace GameDev_Project.Characters
 {
@@ -27,7 +30,7 @@ namespace GameDev_Project.Characters
         private int width = 80;
         private int height = 80;
         private bool isOnGround = false;
-#endregion
+        #endregion
         private Vector2 Limit(Vector2 v, float min, float max)
         {
             float length = v.Length();
@@ -93,55 +96,83 @@ namespace GameDev_Project.Characters
 
         public void Move()
         {
-            var direction = inputReader.ReadInput();
+            Vector2 direction = inputReader.ReadInput();
 
-            // Apply gravity
-            _acceleration.Y = 0.1f;  // Gravity value
-
-            // Check if the hero is on the ground to allow jumping
-            if (isOnGround && direction.Y < 0)
+            // === Horizontal Movement ===
+            if (direction.X != 0)
             {
-                _speed.Y = -3.0f;  // Jump strength
+                // Apply acceleration in the direction of input
+                _speed = new Vector2(_speed.X + 0.9f * direction.X, _speed.Y);
+            }
+            else
+            {
+                // Apply deceleration when no input is provided
+                if (Math.Abs(_speed.X) > 0.2f)
+                {
+                    _speed = new Vector2(_speed.X - 0.2f * Math.Sign(_speed.X), _speed.Y);
+                }
+                else
+                {
+                    _speed = new Vector2(0, _speed.Y); // Stop completely if below threshold
+                }
+            }
+
+            // Clamp horizontal speed
+            _speed = new Vector2(Math.Clamp(_speed.X, -4, 4), _speed.Y);
+
+            // Horizontal collision and position update
+            float horizontalMovement = _speed.X;
+            Rectangle futureHorizontalBoundingbox = new Rectangle(
+                (int)(BoundingBox.X + horizontalMovement),
+                BoundingBox.Y,
+                BoundingBox.Width,
+                BoundingBox.Height
+            );
+
+            if (CollisionHandler.CollidingWithObject(futureHorizontalBoundingbox) == null)
+            {
+                Position += new Vector2(horizontalMovement, 0);
+            }
+            else
+            {
+                _speed = new Vector2(0, _speed.Y); // Stop horizontal movement on collision
+            }
+
+            // === Vertical Movement ===
+            if (direction.Y < 0 && isOnGround)
+            {
+                _speed = new Vector2(_speed.X, -5f); // Jump
+                isOnGround = false;
+            }
+            else if (direction.Y < 0)
+            {
                 isOnGround = false;
             }
 
-            // Allow horizontal movement
-            _acceleration.X = direction.X * 0.1f;
+            // Apply gravity
+            _speed = new Vector2(_speed.X, _speed.Y + 0.1f);
 
-            // Slow down when no horizontal input
-            if (direction.X == 0)
+            // Clamp vertical speed
+            _speed = new Vector2(_speed.X, Math.Clamp(_speed.Y, -30, 80));
+
+            // Vertical collision and position update
+            float verticalMovement = _speed.Y;
+            Rectangle futureVerticalBoundingbox = new Rectangle(
+                BoundingBox.X,
+                (int)(BoundingBox.Y + verticalMovement),
+                BoundingBox.Width,
+                BoundingBox.Height
+            );
+
+            var futureVerticalHit = CollisionHandler.CollidingWithObject(futureVerticalBoundingbox);
+            if (CollisionHandler.CollidingWithObject(futureVerticalBoundingbox) == null)
             {
-                _speed.X *= 0.8f;  // Friction
+                Position += new Vector2(0, verticalMovement);
             }
-
-            if (_speed.Length() < 0.01f)
-                _speed = Vector2.Zero;
-
-            _speed += _acceleration;
-            Limit(_speed, -0.1f, 0.1f);
-
-            var nextPositionX = Position.X + _speed.X;
-            var nextPositionY = Position.Y + _speed.Y;
-
-            // Collision with screen boundaries
-            if (nextPositionX < 0 || nextPositionX > (Game1.screen.Width - width))
+            else if (BoundingBox.Bottom > futureVerticalHit.BoundingBox.Top)
             {
-                _speed.X = 0;
-            }
-
-            if (nextPositionY < 0 || nextPositionY > (Game1.screen.Height - height))
-            {
-                _speed.Y = 0;
-            }
-
-            Position += _speed;
-
-            // Reset isOnGround if hero is on the ground
-            if (Position.Y >= Game1.screen.Height - height)
-            {
-                isOnGround = true;
-                _speed.Y = 0;
-                _acceleration.Y = 0;
+                isOnGround = true; // Landed on ground
+                _speed = new Vector2(_speed.X, 0); // Stop vertical movement
             }
         }
 
@@ -151,9 +182,8 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X, (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
-
 
         public override void HaltMovement(ICollidable other)
         {
@@ -162,31 +192,27 @@ namespace GameDev_Project.Characters
 
             Vector2 separation = Vector2.Zero;
 
-            if (Math.Abs(collisionDirection.X) >= 0.1f)
+            if (Math.Abs(collisionDirection.X) < (width + other.width) / 2)
             {
                 separation.X = -_speed.X;
                 _speed.X = 0;
                 _acceleration.X = 0;
             }
 
-            if (Math.Abs(collisionDirection.Y) >= 0.1f)
+            if (Math.Abs(collisionDirection.Y) < (height + other.height) / 2)
             {
                 separation.Y = -_speed.Y;
                 _speed.Y = 0;
                 _acceleration.Y = 0;
-                isOnGround = true;  // Set isOnGround to true when colliding from the top
+                if (collisionDirection.Y > -(height + other.height) / 2)
+                {
+                    isOnGround = true;
+                }
             }
 
             Position += separation;
         }
 
-        public override void HandleCollision(ICollidable other)
-        {
-            if(other is Block)
-            {
-                HaltMovement(other);
-            }
-        }
         public void ChangeInput(IInputReader inputReader)
         {
             this.inputReader = inputReader;
@@ -219,7 +245,7 @@ namespace GameDev_Project.Characters
             deathAnimation = new Animation();
             for (int i = 0; i < 22; i++)
             {
-                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height*4, width, height)));
+                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height * 4, width, height)));
             }
         }
         public void AddAttackAnimation()

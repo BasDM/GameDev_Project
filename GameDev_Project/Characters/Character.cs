@@ -19,7 +19,7 @@ namespace GameDev_Project.Characters
         public ICollidable CollidingWith { get; set; }
 
         //physics
-        public Vector2 gravity { get; set; }
+        public float gravity { get; set; }
 
         public int width { get; set; }
         public int height { get; set; }
@@ -33,7 +33,7 @@ namespace GameDev_Project.Characters
             health = 1;
             maxHealth = health;
             dead = false;
-            gravity = new Vector2(0, 0.5f);
+            gravity = 0.5f;
         }
 
         //TODO: Use GetHit when player gets hit by enemy or trap ...
@@ -57,8 +57,6 @@ namespace GameDev_Project.Characters
         }
 
         public abstract void Update(GameTime gameTime);
-
-        public abstract void HandleCollision(ICollidable other);
 
         public abstract void HaltMovement(ICollidable other);
     }

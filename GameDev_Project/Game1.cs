@@ -30,8 +30,6 @@ namespace GameDev_Project
         public static Texture2D blockTexture;
         public static Texture2D slimeBlockTexture;
         public static Texture2D trapBlockTexture;
-        
-        CollisionHandler collisionHandler;
 
         //Background
         public static Rectangle screen;
@@ -96,8 +94,7 @@ namespace GameDev_Project
         private void InitializeGameObjects()
         {
             hero = new Hero(texture, new KeyboardReader(), GraphicsDevice);
-            collisionHandler = new CollisionHandler();
-            collisionHandler.AddCharacter(hero);
+            CollisionHandler.AddCharacter(hero);
             ui = new UserInterface(hero,Content,20, 20, new Vector2(10,10));
             background = new Background();
             screen = new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height);
@@ -144,7 +141,6 @@ namespace GameDev_Project
             }
 
             hero.Update(gameTime);
-            collisionHandler.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -181,7 +177,7 @@ namespace GameDev_Project
 
             foreach (var block in blocks)
             {
-                collisionHandler.AddCollidable(block);
+                CollisionHandler.AddCollidable(block);
             }
         }
     }
