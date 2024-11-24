@@ -9,13 +9,18 @@ namespace GameDev_Project.Characters
     public abstract class Character : IGameObject, ICollidable
     {
         public IInputReader inputReader;
-        public bool debug = false;
+        public bool debug = true;
 
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; } = new Vector2(0, 0);
+
         //collision
         public ICollidable CollidingWith { get; set; }
+
+        //physics
+        public Vector2 gravity { get; set; }
+
         public int width { get; set; }
         public int height { get; set; }
         public int health { get; set; }
@@ -28,13 +33,15 @@ namespace GameDev_Project.Characters
             health = 1;
             maxHealth = health;
             dead = false;
+            gravity = new Vector2(0, 0.5f);
         }
 
         //TODO: Use GetHit when player gets hit by enemy or trap ...
         public void GetHit(int damage)
         {
             health -= damage;
-            if(health <= 0){
+            if (health <= 0)
+            {
                 dead = true;
             }
         }

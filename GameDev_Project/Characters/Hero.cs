@@ -11,6 +11,7 @@ namespace GameDev_Project.Characters
 {
     public class Hero : Character, IGameObject
     {
+        #region Variables
         Texture2D heroTexture;
         Animation currentAnimation;
         Animation walkingAnimation;
@@ -25,6 +26,8 @@ namespace GameDev_Project.Characters
 
         private int width = 80;
         private int height = 80;
+        private bool isOnGround = false;
+#endregion
         private Vector2 Limit(Vector2 v, float min, float max)
         {
             float length = v.Length();
@@ -63,6 +66,7 @@ namespace GameDev_Project.Characters
             AddWalkingAnimation();
             AddIdleAnimation();
             AddDeathAnimation();
+            AddAttackAnimation();
         }
 
         public override void Update(GameTime gameTime)
@@ -87,43 +91,39 @@ namespace GameDev_Project.Characters
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
         }
 
-        private void Move()
+        public void Move()
         {
             var direction = inputReader.ReadInput();
 
-            //slow down when no input
-            if (direction.X == 0)
+            // Apply gravity
+            _acceleration.Y = 0.1f;  // Gravity value
+
+            // Check if the hero is on the ground to allow jumping
+            if (isOnGround && direction.Y < 0)
             {
-                _acceleration.X = 0;
-                //friction
-                _speed.X *= 0.8f;
+                _speed.Y = -3.0f;  // Jump strength
+                isOnGround = false;
             }
 
-            if (direction.Y == 0)
-            {
-                _acceleration.Y = 0;
-                //friction
-                _speed.Y *= 0.8f;
+            // Allow horizontal movement
+            _acceleration.X = direction.X * 0.1f;
 
+            // Slow down when no horizontal input
+            if (direction.X == 0)
+            {
+                _speed.X *= 0.8f;  // Friction
             }
 
             if (_speed.Length() < 0.01f)
                 _speed = Vector2.Zero;
 
-            //TODO add gravity
-
-
-            _acceleration += direction / 900;
-            Limit(_acceleration, -0.07f, 0.07f);
-
             _speed += _acceleration;
             Limit(_speed, -0.1f, 0.1f);
-
 
             var nextPositionX = Position.X + _speed.X;
             var nextPositionY = Position.Y + _speed.Y;
 
-
+            // Collision with screen boundaries
             if (nextPositionX < 0 || nextPositionX > (Game1.screen.Width - width))
             {
                 _speed.X = 0;
@@ -135,6 +135,14 @@ namespace GameDev_Project.Characters
             }
 
             Position += _speed;
+
+            // Reset isOnGround if hero is on the ground
+            if (Position.Y >= Game1.screen.Height - height)
+            {
+                isOnGround = true;
+                _speed.Y = 0;
+                _acceleration.Y = 0;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -146,11 +154,50 @@ namespace GameDev_Project.Characters
             spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X , (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
+
+        public override void HaltMovement(ICollidable other)
+        {
+            Vector2 collisionDirection = Position - other.Position;
+            collisionDirection = Limit(collisionDirection, -1f, 1f);
+
+            Vector2 separation = Vector2.Zero;
+
+            if (Math.Abs(collisionDirection.X) >= 0.1f)
+            {
+                separation.X = -_speed.X;
+                _speed.X = 0;
+                _acceleration.X = 0;
+            }
+
+            if (Math.Abs(collisionDirection.Y) >= 0.1f)
+            {
+                separation.Y = -_speed.Y;
+                _speed.Y = 0;
+                _acceleration.Y = 0;
+                isOnGround = true;  // Set isOnGround to true when colliding from the top
+            }
+
+            Position += separation;
+        }
+
+        public override void HandleCollision(ICollidable other)
+        {
+            if(other is Block)
+            {
+                HaltMovement(other);
+            }
+        }
         public void ChangeInput(IInputReader inputReader)
         {
             this.inputReader = inputReader;
         }
 
+        public bool Intersects(IGameObject other)
+        {
+            return BoundingBox.Intersects(other.BoundingBox);
+        }
+
+        #region Animations
         public void AddWalkingAnimation()
         {
             walkingAnimation = new Animation();
@@ -175,7 +222,6 @@ namespace GameDev_Project.Characters
                 deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height*4, width, height)));
             }
         }
-
         public void AddAttackAnimation()
         {
             attackAnimation = new Animation();
@@ -184,47 +230,6 @@ namespace GameDev_Project.Characters
                 attackAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height * 3, width, height)));
             }
         }
-
-        public bool Intersects(IGameObject other)
-        {
-            return BoundingBox.Intersects(other.BoundingBox);
-        }
-
-        public override void HaltMovement(ICollidable other)
-        {
-            Vector2 collisionDirection = Position - other.Position;
-            collisionDirection = Limit(collisionDirection, -1f, 1f);
-
-            //How much you need to be pushed back when colliding to not clip into the wall
-            Vector2 seperation = Vector2.Zero;
-            
-
-            //Stop if collision in X direction
-            if (Math.Abs(collisionDirection.X) >= 0.1f)
-            {
-                seperation.X = -_speed.X;
-                _speed.X *= 0;
-                _acceleration.X = 0;
-            }
-
-            //Same thing but in Y direction
-            if (Math.Abs(collisionDirection.Y) >= 0.1f)
-            {
-                seperation.Y = -_speed.Y;
-                _speed.Y *= 0;
-                _acceleration.Y = 0;
-            }
-
-            Position += seperation;
-
-        }
-
-        public override void HandleCollision(ICollidable other)
-        {
-            if(other is Block)
-            {
-                HaltMovement(other);
-            }
-        }
+        #endregion
     }
 }
