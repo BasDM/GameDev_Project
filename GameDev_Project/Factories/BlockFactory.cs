@@ -8,7 +8,7 @@ namespace GameDev_Project.Factories
 {
     public class BlockFactory
     {
-        public static Block CreateBlock( string type, Texture2D texture ,int x, int y)
+        public static Block CreateBlock( string type, Texture2D texture, int x, int y)
         {
             Block newBlock = null;
             type = type.ToUpper();
@@ -34,10 +34,10 @@ namespace GameDev_Project.Factories
                 case 0:
                     break;
                 case 1:
-                    newBlock = new Block(x*100, y*80);
+                    newBlock = new Block(x*50, y*50);
                     break;
                 case 2:
-                    newBlock = new SlimeBlock(x*100, y*80);
+                    newBlock = new SlimeBlock(x*50, y*50);
                     break;
                 default:
                     break;

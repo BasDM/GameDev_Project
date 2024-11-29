@@ -12,6 +12,8 @@ using GameDev_Project.UI;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using GameDev_Project.AreaGameComponents;
+using GameDev_Project.Camera_s;
+using System;
 
 namespace GameDev_Project
 {
@@ -25,7 +27,6 @@ namespace GameDev_Project
         UserInterface ui;
 
         //Tiles
-        Color backgroundColor = Color.CornflowerBlue;
         List<Block> blocks = new List<Block>();
         public static Texture2D blockTexture;
         public static Texture2D slimeBlockTexture;
@@ -42,7 +43,7 @@ namespace GameDev_Project
         private SoundEffectInstance slashEffectInstance;
 
         //Camera
-        
+        private FollowingCamera camera;
 
         //Music
         private Song themeSong;
@@ -50,14 +51,15 @@ namespace GameDev_Project
 
         int[,] gameBoard = new int[,]
         {
-            { 1,1,1,1,1,1,1,1 },
-            { 0,0,1,1,0,1,1,1 },
-            { 1,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,0,1 },
-            { 1,0,0,0,0,0,0,2 },
-            { 1,0,1,1,1,1,1,2 },
-            { 1,0,0,0,0,0,0,0 },
-            { 1,1,1,1,1,1,1,1 }
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,1,1,0,0,0,1,1,1,0,1,1,0,0,1 },
+            { 1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1 },
+            { 1,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1 },
+            { 1,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1 },
+            { 1,0,1,1,1,1,1,1,1,1,1,1,0,1,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
         };
 
         public Game1()
@@ -66,12 +68,15 @@ namespace GameDev_Project
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             _graphics.IsFullScreen = false;
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             CreateBlocks();
+            camera = new FollowingCamera(Vector2.Zero);
         }
 
         protected override void LoadContent()
@@ -141,20 +146,25 @@ namespace GameDev_Project
             }
 
             hero.Update(gameTime);
+            camera.Follow(hero.Position, new Rectangle(0,0,screen.Width,screen.Height));
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(backgroundColor);
+            GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            background.Draw(_spriteBatch, screen);
+            Matrix cameraTransform = Matrix.CreateTranslation(new Vector3(-camera.Position, 0));
+
+            _spriteBatch.Begin(transformMatrix: cameraTransform, samplerState: SamplerState.PointClamp);
+            background.Draw(_spriteBatch, backgroundTexture, camera.Position, screen);
             foreach (var item in blocks)
             {
                 item.Draw(_spriteBatch);
             }
             hero.Draw(_spriteBatch);
+            _spriteBatch.End();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             ui.Draw(_spriteBatch);
             _spriteBatch.End();
 

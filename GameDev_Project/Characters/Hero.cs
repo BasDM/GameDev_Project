@@ -52,7 +52,7 @@ namespace GameDev_Project.Characters
         }
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
-            Position = new Vector2(20, 80);
+            Position = new Vector2(0,20);
             _speed = new Vector2(0, 0);
             _acceleration = new Vector2(0.9f, 0.9f);
 
@@ -117,6 +117,12 @@ namespace GameDev_Project.Characters
                 }
             }
 
+            // Apply gravity
+            _speed = new Vector2(_speed.X, _speed.Y + 0.1f);
+
+            // Clamp vertical speed
+            _speed = new Vector2(_speed.X, Math.Clamp(_speed.Y, -30, 80));
+
             // Clamp horizontal speed
             _speed = new Vector2(Math.Clamp(_speed.X, -4, 4), _speed.Y);
 
@@ -144,16 +150,10 @@ namespace GameDev_Project.Characters
                 _speed = new Vector2(_speed.X, -5f); // Jump
                 isOnGround = false;
             }
-            else if (direction.Y < 0)
+            else if(direction.Y < 0)
             {
                 isOnGround = false;
             }
-
-            // Apply gravity
-            _speed = new Vector2(_speed.X, _speed.Y + 0.1f);
-
-            // Clamp vertical speed
-            _speed = new Vector2(_speed.X, Math.Clamp(_speed.Y, -30, 80));
 
             // Vertical collision and position update
             float verticalMovement = _speed.Y;
@@ -165,11 +165,11 @@ namespace GameDev_Project.Characters
             );
 
             var futureVerticalHit = CollisionHandler.CollidingWithObject(futureVerticalBoundingbox);
-            if (CollisionHandler.CollidingWithObject(futureVerticalBoundingbox) == null)
+            if (futureVerticalHit == null)
             {
                 Position += new Vector2(0, verticalMovement);
             }
-            else if (BoundingBox.Bottom > futureVerticalHit.BoundingBox.Top)
+            else if((BoundingBox.Bottom > futureVerticalHit.BoundingBox.Top))
             {
                 isOnGround = true; // Landed on ground
                 _speed = new Vector2(_speed.X, 0); // Stop vertical movement

@@ -1,20 +1,13 @@
 ﻿using GameDev_Project.Characters;
-using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project.UI
 {
     public class UserInterface
     {
         private Hero hero;
-        private ContentManager content;
         private int heartWidth;
         private int heartHeight;
         private Vector2 heartPosition;
@@ -33,8 +26,7 @@ namespace GameDev_Project.UI
         {
             for (int i = 0; i < hero.health; i++)
             {
-                UIElement heart = new UIElement(heartTexture, heartWidth, heartHeight, new Vector2(heartPosition.X + i * heartWidth, heartPosition.Y));
-                heart.Draw(spriteBatch);
+                spriteBatch.Draw(heartTexture, new Vector2(heartPosition.X + i * heartWidth, heartPosition.Y), Color.White);
             }
         }
     }

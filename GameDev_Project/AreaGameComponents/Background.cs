@@ -11,9 +11,10 @@ namespace GameDev_Project.AreaGameComponents
 {
     public class Background
     {
-        public void Draw(SpriteBatch spriteBatch, Rectangle screen)
+        public void Draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 cameraPosition, Rectangle screen)
         {
-            spriteBatch.Draw(Game1.backgroundTexture, screen, Color.White);
+            // Draw the background texture at the position offset by the camera
+            spriteBatch.Draw(texture, new Rectangle((int)cameraPosition.X, (int)cameraPosition.Y, screen.Width, screen.Height), Color.White);
         }
     }
 }
