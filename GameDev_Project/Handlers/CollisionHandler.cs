@@ -10,9 +10,9 @@ namespace GameDev_Project.Events
         private static List<ICollidable> collidableList = new List<ICollidable>();
         private static List<Character> characters = new List<Character>();
 
-        public static ICollidable? CollidingWithObject(Rectangle boundingBoxToCheck)
+        public static List<ICollidable>? CollidingWithObject(Rectangle boundingBoxToCheck)
         {
-            return collidableList.Find(o => boundingBoxToCheck.Intersects(o.BoundingBox));
+            return collidableList.FindAll(o => boundingBoxToCheck.Intersects(o.BoundingBox));
         }
         public static void AddCollidable(ICollidable collidable)
         {
