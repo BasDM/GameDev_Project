@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GameDev_Project.Characters
@@ -21,22 +22,17 @@ namespace GameDev_Project.Characters
         Animation attackAnimation;
 
         private Vector2 _speed;
-        private float MaxVerticalSpeed = 5;
-        private float MaxHorizontalSpeed = 5;
-
+        private float MaxVerticalSpeed = 80;
+        private float MaxHorizontalSpeed = 4;
         private Vector2 _acceleration;
-        private float AccelerationMultiplier=5;
-        private float MaxAcceleration = 4;
+        private float AccelerationMultiplier = 0.9f;
+
+        //jump vars
+        private int counter = 0;
+        private bool isJumping = false;
 
         private IInputReader inputReader;
         private SpriteEffects horizontalFlip = SpriteEffects.None;
-
-        //deceleration
-        private const float GroundDeceleration = 0.48f;
-        private const float AirDeceleration = 0.58f;
-
-        //Collision
-        private float previousBottom;
 
         private int width = 80;
         private int height = 80;
@@ -63,7 +59,7 @@ namespace GameDev_Project.Characters
         }
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
-            Position = new Vector2(0,20);
+            Position = new Vector2(0, 20);
             _speed = new Vector2(0, 0);
             _acceleration = new Vector2(0.9f, 0.9f);
 
@@ -113,7 +109,7 @@ namespace GameDev_Project.Characters
             if (direction.X != 0)
             {
                 // Apply acceleration in the direction of input
-                _speed = new Vector2(_speed.X + 0.9f * direction.X, _speed.Y);
+                _speed = new Vector2(_speed.X + AccelerationMultiplier * direction.X, _speed.Y);
             }
             else
             {
@@ -125,10 +121,20 @@ namespace GameDev_Project.Characters
             }
 
             // Apply gravity
-            _speed = new Vector2(_speed.X, _speed.Y + 0.1f);
+            if (isJumping && counter < 5)
+            {
+                _speed = new Vector2(_speed.X, 0.8f * _speed.Y);
+                counter++;
+            }
+            else
+            {
+                _speed = new Vector2(_speed.X, _speed.Y + gravity);
+                counter = 0;
+                isJumping = false;
+            }
 
             // Clamp speeds
-            _speed = new Vector2(Math.Clamp(_speed.X, -4, 4), Math.Clamp(_speed.Y, -30, 80));
+            _speed = new Vector2(Math.Clamp(_speed.X, -4, MaxHorizontalSpeed), Math.Clamp(_speed.Y, -30, MaxVerticalSpeed));
 
             // === Horizontal Collision ===
             float horizontalMovement = _speed.X;
@@ -140,15 +146,11 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> horizontalCollidables = CollisionHandler.CollidingWithObject(futureHorizontalBoundingBox);
-            if (horizontalCollidables.Any(o => BoundingBox.Left >= o.BoundingBox.Right || BoundingBox.Right <= o.BoundingBox.Left))
+            if (horizontalCollidables.Any(o => BoundingBox.Left <= o.BoundingBox.Right || BoundingBox.Right >= o.BoundingBox.Left))
             {
                 // Stop horizontal movement only
                 horizontalMovement = 0;
-                _speed = new Vector2(0, _speed.Y);
-            }
-            else
-            {
-                Position += new Vector2(horizontalMovement, 0);
+                _speed = new Vector2(horizontalMovement, _speed.Y);
             }
 
             // === Vertical Collision ===
@@ -161,34 +163,32 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
-            if (verticalCollidables.Count > 0)
+            if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !isJumping)
             {
-                // Stop at the ground if moving down
-                if (verticalMovement > 0) // Moving down
-                {
-                    verticalMovement = 0;
-                    isOnGround = true;
-                }
-                else // Moving up
-                {
-                    verticalMovement = 0;
-                    isOnGround = false;
-                }
-
-                _speed = new Vector2(_speed.X, 0);
+                isJumping = false;
+                counter = 0;
+                isOnGround = true;
+                verticalMovement = 0;
             }
-            else
+            else if(verticalCollidables.Any(o => BoundingBox.Top >= o.BoundingBox.Bottom))
             {
-                Position += new Vector2(0, verticalMovement);
+                isJumping = false;
+                counter = 0;
                 isOnGround = false;
+                verticalMovement = gravity;
             }
 
-            // === Jump Handling ===
+            //=== JUMP LOGIC ===
             if (direction.Y < 0 && isOnGround)
             {
-                _speed = new Vector2(_speed.X, -5f); // Jump
                 isOnGround = false;
+                verticalMovement = -10f;
+                _speed.Y = verticalMovement;
+                isJumping = true;
             }
+
+            _speed = new Vector2(_speed.X, verticalMovement);
+            Position += _speed;
         }
 
         public void Draw(SpriteBatch spriteBatch)
