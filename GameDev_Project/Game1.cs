@@ -21,7 +21,7 @@ namespace GameDev_Project
     {
         public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        
+
         Texture2D texture;
         Hero hero;
         UserInterface ui;
@@ -52,13 +52,8 @@ namespace GameDev_Project
         int[,] gameBoard = new int[,]
         {
             { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-            { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,1,1,0,0,0,1,1,1,0,1,1,0,0,1 },
-            { 1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1 },
-            { 1,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1 },
-            { 1,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1 },
-            { 1,0,1,1,1,1,1,1,1,1,1,1,0,1,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1 },
+            { 1,1,1,0,0,0,1,1,1,1,1,1,0,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
         };
 
@@ -85,7 +80,7 @@ namespace GameDev_Project
 
             texture = Content.Load<Texture2D>("NightBorne");
             blockTexture = Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
-            
+
             //slimeBlockTexture = Content.Load<Texture2D>(" ");
             //trapBlockTexture = Content.Load<Texture2D>(" ");
             backgroundTexture = Content.Load<Texture2D>("crystal_cave_background");
@@ -100,9 +95,9 @@ namespace GameDev_Project
         {
             hero = new Hero(texture, new KeyboardReader(), GraphicsDevice);
             CollisionHandler.AddCharacter(hero);
-            ui = new UserInterface(hero,Content,20, 20, new Vector2(10,10));
+            ui = new UserInterface(hero, Content, 20, 20, new Vector2(10, 10));
             background = new Background();
-            screen = new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height);
+            screen = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
         }
 
         protected override void Update(GameTime gameTime)
@@ -123,7 +118,7 @@ namespace GameDev_Project
             //Attack sound effect
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                if(slashEffectInstance.State != SoundState.Playing)
+                if (slashEffectInstance.State != SoundState.Playing)
                 {
                     slashEffectInstance.Volume = soundEffectVolume;
                     slashEffectInstance.Play();
@@ -133,7 +128,7 @@ namespace GameDev_Project
             //Play or pause music
             if (Keyboard.GetState().IsKeyDown(Keys.M))
             {
-                if(MediaPlayer.State == MediaState.Playing)
+                if (MediaPlayer.State == MediaState.Playing)
                 {
                     MediaPlayer.Stop();
                 }
@@ -146,7 +141,7 @@ namespace GameDev_Project
             }
 
             hero.Update(gameTime);
-            camera.Follow(hero.Position, new Rectangle(0,0,screen.Width,screen.Height));
+            camera.Follow(hero.Position, new Rectangle(0, 0, screen.Width, screen.Height));
             base.Update(gameTime);
         }
 

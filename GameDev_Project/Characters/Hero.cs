@@ -25,7 +25,7 @@ namespace GameDev_Project.Characters
         private float MaxVerticalSpeed = 80;
         private float MaxHorizontalSpeed = 4;
         private Vector2 _acceleration;
-        private float AccelerationMultiplier = 0.9f;
+        private float AccelerationMultiplier = 0.5f;
 
         //jump vars
         private int counter = 0;
@@ -182,7 +182,7 @@ namespace GameDev_Project.Characters
             if (direction.Y < 0 && isOnGround)
             {
                 isOnGround = false;
-                verticalMovement = -10f;
+                verticalMovement = -20f;
                 _speed.Y = verticalMovement;
                 isJumping = true;
             }
