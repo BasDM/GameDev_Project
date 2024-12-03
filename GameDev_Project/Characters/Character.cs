@@ -33,7 +33,7 @@ namespace GameDev_Project.Characters
             health = 1;
             maxHealth = health;
             dead = false;
-            gravity = 2f;
+            gravity = 1f;
         }
 
         //TODO: Use GetHit when player gets hit by enemy or trap ...
