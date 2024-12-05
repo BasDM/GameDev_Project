@@ -1,6 +1,5 @@
 ﻿using GameDev_Project.AnimationLogic;
 using GameDev_Project.Events;
-using GameDev_Project.Extensions;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

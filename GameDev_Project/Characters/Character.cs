@@ -9,7 +9,7 @@ namespace GameDev_Project.Characters
     public abstract class Character : IGameObject, ICollidable
     {
         public IInputReader inputReader;
-        public bool debug = true;
+        public bool debug = false;
 
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
