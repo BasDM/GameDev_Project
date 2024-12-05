@@ -87,8 +87,6 @@ namespace GameDev_Project
             texture = Content.Load<Texture2D>("NightBorne");
             blockTexture = Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
 
-            //slimeBlockTexture = Content.Load<Texture2D>(" ");
-            //trapBlockTexture = Content.Load<Texture2D>(" ");
             backgroundTexture = Content.Load<Texture2D>("crystal_cave_background");
 
             slashEffect = Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
@@ -104,6 +102,9 @@ namespace GameDev_Project
             ui = new UserInterface(hero, Content, 20, 20, new Vector2(10, 10));
             background = new Background();
             screen = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = soundEffectVolume;
+            MediaPlayer.Play(themeSong);
         }
 
         protected override void Update(GameTime gameTime)
@@ -132,18 +133,15 @@ namespace GameDev_Project
             }
 
             //Play or pause music
-            if (Keyboard.GetState().IsKeyDown(Keys.M))
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && MediaPlayer.State == MediaState.Playing)
             {
-                if (MediaPlayer.State == MediaState.Playing)
-                {
-                    MediaPlayer.Stop();
-                }
-                else
-                {
-                    MediaPlayer.IsRepeating = true;
-                    MediaPlayer.Volume = soundEffectVolume;
-                    MediaPlayer.Play(themeSong);
-                }
+                MediaPlayer.Stop();
+            }
+            else if(Keyboard.GetState().IsKeyDown(Keys.M) && MediaPlayer.State == MediaState.Stopped)
+            {
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Volume = soundEffectVolume;
+                MediaPlayer.Play(themeSong);
             }
 
             hero.Update(gameTime);
