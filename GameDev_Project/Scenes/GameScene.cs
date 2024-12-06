@@ -64,9 +64,9 @@ namespace GameDev_Project.Scenes
         {
             texture = game.Content.Load<Texture2D>("NightBorne");
             blockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
-
             backgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
 
+            //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
             slashEffectInstance = slashEffect.CreateInstance();
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");

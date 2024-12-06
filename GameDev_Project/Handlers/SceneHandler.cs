@@ -10,6 +10,11 @@ namespace GameDev_Project.Handlers
         public Dictionary<SceneType, Scene> sceneDictionary { get; set; }
         public Scene CurrentScene { get; set; }
 
+        public SceneHandler()
+        {
+            sceneDictionary = new Dictionary<SceneType, Scene>();
+        }
+
         public void SetScene(SceneType sceneType)
         {
             CurrentScene = sceneDictionary[sceneType];
