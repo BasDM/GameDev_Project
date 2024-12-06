@@ -1,34 +1,23 @@
 ﻿using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GameDev_Project.Handlers
 {
     public class SceneHandler
     {
-        //Dictionary so I can storage a string of the scene with the scene
-        public Dictionary<string, Scene> sceneDictionary { get; set; }
+        public Dictionary<SceneType, Scene> sceneDictionary { get; set; }
         public Scene CurrentScene { get; set; }
-        public void SetScene()
+
+        public void SetScene(SceneType sceneType)
         {
-            //TODO: Change the CurrentScene to a given scene;
-            throw new NotImplementedException();
+            CurrentScene = sceneDictionary[sceneType];
+            CurrentScene.LoadContent();
         }
-        public void AddScene()
+        public void AddScene(SceneType sceneType, Scene scene)
         {
-            //Add given scene to dictionary here
-            throw new NotImplementedException();
-        }
-        public void RemoveScene()
-        {
-            //To delete scenes from the dictionary.
-            throw new NotImplementedException();
+            sceneDictionary.Add(sceneType,scene);
         }
 
         //=== Call the logic of the scene ===

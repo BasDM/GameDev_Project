@@ -1,28 +1,17 @@
-﻿using GameDev_Project.Characters;
-using GameDev_Project.GameComponents;
-using GameDev_Project.Input;
+﻿using GameDev_Project.Handlers;
+using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using GameDev_Project.Factories;
-using GameDev_Project.Events;
-using Microsoft.Xna.Framework.Content;
-using GameDev_Project.UI;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
-using GameDev_Project.AreaGameComponents;
-using GameDev_Project.Camera_s;
 using System;
 
 namespace GameDev_Project
 {
     public class Game1 : Game
     {
-        public static GraphicsDeviceManager _graphics;
+        private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        
+        public SceneHandler SceneHandler { get; set; }
 
         public Game1()
         {
@@ -36,36 +25,28 @@ namespace GameDev_Project
 
         protected override void Initialize()
         {
+            SceneHandler = new SceneHandler();
+            SceneHandler.AddScene(Scenes.SceneType.gameScene, new GameScene(this));
+            SceneHandler.SetScene(SceneType.gameScene);
             base.Initialize();
-            
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            
-            InitializeGameObjects();
-        }
-
-        private void InitializeGameObjects()
-        {
-            
         }
 
         protected override void Update(GameTime gameTime)
         {
-            
+            SceneHandler.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            
-
+            GraphicsDevice.Clear(Color.Black);
+            SceneHandler.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
-
-        
     }
 }
