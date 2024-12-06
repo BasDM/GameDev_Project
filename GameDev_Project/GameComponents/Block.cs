@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.Interfaces;
+using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,7 +20,7 @@ namespace GameDev_Project.GameComponents
             height = 50;
             BoundingBox = new Rectangle(x, y, width, height);
             Color = Color.White;
-            Texture = Game1.blockTexture;
+            Texture = GameScene.blockTexture;
         }
 
         public void Draw(SpriteBatch spriteBatch)
