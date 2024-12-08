@@ -28,14 +28,14 @@ namespace GameDev_Project.Characters
 
         private int width = 80;
         private int height = 80;
-        private bool isOnGround = false;
         #endregion
         
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
+            IsOnGround = false;
             Position = new Vector2(0, 20);
-            speed = new Vector2(0, 0);
-            _acceleration = new Vector2(0.9f, 0.9f);
+            Speed = new Vector2(0, 0);
+            Acceleration = new Vector2(0.9f, 0.9f);
             MaxVerticalSpeed = 80;
             MaxHorizontalSpeed = 4;
 
@@ -46,8 +46,8 @@ namespace GameDev_Project.Characters
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
 
             //Health
-            health = 5;
-            maxHealth = health;
+            Health = 5;
+            MaxHealth = Health;
 
             AddWalkingAnimation();
             AddIdleAnimation();
@@ -85,35 +85,35 @@ namespace GameDev_Project.Characters
             if (direction.X != 0)
             {
                 // Apply acceleration in the direction of input
-                speed = new Vector2(speed.X + AccelerationMultiplier * direction.X, speed.Y);
+                Speed = new Vector2(Speed.X + AccelerationMultiplier * direction.X, Speed.Y);
             }
             else
             {
                 // Apply deceleration when no input is provided
-                if (Math.Abs(speed.X) > 0.2f)
-                    speed = new Vector2(speed.X - 0.2f * Math.Sign(speed.X), speed.Y);
+                if (Math.Abs(Speed.X) > 0.2f)
+                    Speed = new Vector2(Speed.X - 0.2f * Math.Sign(Speed.X), Speed.Y);
                 else
-                    speed = new Vector2(0, speed.Y); // Stop completely if below threshold
+                    Speed = new Vector2(0, Speed.Y); // Stop completely if below threshold
             }
 
             // Apply gravity
             if (isJumping && counter < 5)
             {
-                speed = new Vector2(speed.X, 0.8f * speed.Y);
+                Speed = new Vector2(Speed.X, 0.8f * Speed.Y);
                 counter++;
             }
             else
             {
-                speed = new Vector2(speed.X, speed.Y + gravity);
+                Speed = new Vector2(Speed.X, Speed.Y + Gravity);
                 counter = 0;
                 isJumping = false;
             }
 
             // Clamp speeds
-            speed = new Vector2(Math.Clamp(speed.X, -4, MaxHorizontalSpeed), Math.Clamp(speed.Y, -30, MaxVerticalSpeed));
+            Speed = new Vector2(Math.Clamp(Speed.X, -4, MaxHorizontalSpeed), Math.Clamp(Speed.Y, -30, MaxVerticalSpeed));
 
             // === Horizontal Collision ===
-            float horizontalMovement = speed.X;
+            float horizontalMovement = Speed.X;
             Rectangle futureHorizontalBoundingBox = new Rectangle(
                 (int)(BoundingBox.X + horizontalMovement),
                 BoundingBox.Y,
@@ -126,11 +126,11 @@ namespace GameDev_Project.Characters
             {
                 // Stop horizontal movement only
                 horizontalMovement = 0;
-                speed = new Vector2(horizontalMovement, speed.Y);
+                Speed = new Vector2(horizontalMovement, Speed.Y);
             }
 
             // === Vertical Collision ===
-            float verticalMovement = speed.Y;
+            float verticalMovement = Speed.Y;
             Rectangle futureVerticalBoundingBox = new Rectangle(
                 BoundingBox.X,
                 (int)(BoundingBox.Y + verticalMovement),
@@ -143,33 +143,33 @@ namespace GameDev_Project.Characters
             {
                 isJumping = false;
                 counter = 0;
-                isOnGround = true;
+                IsOnGround = true;
                 verticalMovement = 0;
             }
             else if(verticalCollidables.Any(o => BoundingBox.Top >= o.BoundingBox.Bottom))
             {
                 isJumping = false;
                 counter = 0;
-                isOnGround = false;
-                verticalMovement = gravity;
+                IsOnGround = false;
+                verticalMovement = Gravity;
             }
 
             //=== JUMP LOGIC ===
-            if (direction.Y < 0 && isOnGround)
+            if (direction.Y < 0 && IsOnGround)
             {
-                isOnGround = false;
+                IsOnGround = false;
                 verticalMovement = -20f;
-                speed = new Vector2(speed.X,verticalMovement);
+                Speed = new Vector2(Speed.X,verticalMovement);
                 isJumping = true;
             }
 
-            speed = new Vector2(speed.X, verticalMovement);
-            Position += speed;
+            Speed = new Vector2(Speed.X, verticalMovement);
+            Position += Speed;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (debug)
+            if (Debug)
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }

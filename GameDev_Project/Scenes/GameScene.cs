@@ -67,7 +67,7 @@ namespace GameDev_Project.Scenes
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
             hero = new Hero(texture, new KeyboardReader(), game.GraphicsDevice);
-            enemy = new Enemy(game.GraphicsDevice);
+            enemy = new Enemy(game.GraphicsDevice,hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(hero);
@@ -123,6 +123,7 @@ namespace GameDev_Project.Scenes
             }
 
             hero.Update(gameTime);
+            enemy.Update(gameTime);
             camera.Follow(hero.Position, new Rectangle(0, 0, screen.Width, screen.Height));
             base.Update(gameTime);
         }

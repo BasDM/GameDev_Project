@@ -8,8 +8,8 @@ namespace GameDev_Project.Characters
 {
     public abstract class Character : IGameObject, ICollidable
     {
-        public IInputReader inputReader;
-        public bool debug = false;
+        public IInputReader InputReader;
+        public bool Debug = false;
 
         public Rectangle BoundingBox { get; set; }
         public Texture2D Texture { get; set; }
@@ -19,37 +19,40 @@ namespace GameDev_Project.Characters
         public ICollidable CollidingWith { get; set; }
 
         //physics
-        public float gravity { get; set; }
+        public float Gravity { get; set; }
+        public bool IsOnGround { get; set; }
 
-        //speed
-        public Vector2 speed { get; set; }
+        //speed (varies from character to character so yes to setters)
+        public Vector2 Speed { get; set; }
         public float MaxVerticalSpeed { get; set; }
         public float MaxHorizontalSpeed { get; set; }
-        public Vector2 _acceleration { get; set; }
-        public float AccelerationMultiplier { get; set; } = 0.5f;
+        public Vector2 Acceleration { get; set; }
 
-        public int width { get; set; }
-        public int height { get; set; }
-        public int health { get; set; }
-        public int maxHealth { get; set; }
-        public bool dead { get; set; }
+        //should always return 0.5f. Never changed so no set
+        public float AccelerationMultiplier { get { return 0.5f; } }
+
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Health { get; set; }
+        public int MaxHealth { get; set; }
+        public bool Dead { get; set; }
 
         public Character()
         {
             //make health 1 and maxHealth refer to health so I only need to change 1 value
-            health = 1;
-            maxHealth = health;
-            dead = false;
-            gravity = 1f;
+            Health = 1;
+            MaxHealth = Health;
+            Dead = false;
+            Gravity = 1f;
         }
 
-        //TODO: Use GetHit when player gets hit by enemy or trap ...
+        //TODO: Use GetHit when player gets hit by enemy
         public void GetHit(int damage)
         {
-            health -= damage;
-            if (health <= 0)
+            Health -= damage;
+            if (Health <= 0)
             {
-                dead = true;
+                Dead = true;
             }
         }
 

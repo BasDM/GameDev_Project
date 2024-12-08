@@ -7,8 +7,8 @@ namespace GameDev_Project.GameComponents
 {
     public class Block : IAreaGameComponent
     {
-        public int height { get; set; }
-        public int width { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public Rectangle BoundingBox { get; set; }
         public Color Color { get; set; }
         public Texture2D Texture { get; set; }
@@ -16,16 +16,16 @@ namespace GameDev_Project.GameComponents
 
         public Block(int x, int y)
         {
-            width = 50;
-            height = 50;
-            BoundingBox = new Rectangle(x, y, width, height);
+            Width = 50;
+            Height = 50;
+            BoundingBox = new Rectangle(x, y, Width, Height);
             Color = Color.White;
             Texture = GameScene.blockTexture;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, BoundingBox, new Rectangle(0, 3, width, height), Color.White);
+            spriteBatch.Draw(Texture, BoundingBox, new Rectangle(0, 3, Width, Height), Color.White);
         }
 
         public bool Intersects(ICollidable other)

@@ -24,7 +24,7 @@ namespace GameDev_Project.UI
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < hero.health; i++)
+            for (int i = 0; i < hero.Health; i++)
             {
                 spriteBatch.Draw(heartTexture, new Vector2(heartPosition.X + i * heartWidth, heartPosition.Y), Color.White);
             }
