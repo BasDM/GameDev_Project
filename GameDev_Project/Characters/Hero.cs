@@ -56,6 +56,11 @@ namespace GameDev_Project.Characters
 
         public override void Update(GameTime gameTime)
         {
+            if(ImmunityTimer > 0)
+            {
+                ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
             Move();
             if (inputReader.ReadInput().X == 0 && inputReader.ReadInput().Y == 0)
                 currentAnimation = idleAnimation;

@@ -123,9 +123,9 @@ namespace GameDev_Project.Characters
                     horizontalFlip = SpriteEffects.None;
             }
 
-            if (BoundingBox.Intersects(GameScene.hero.BoundingBox))
+            if (BoundingBox.Intersects(GameScene.Hero.BoundingBox) && GameScene.Hero.ImmunityTimer <= 0)
             {
-                GameScene.hero.GetHit(1);
+                GameScene.Hero.GetHit(1);
             }
 
             currentAnimation.Update(gameTime);

@@ -20,7 +20,7 @@ namespace GameDev_Project.GameComponents
             Height = 50;
             BoundingBox = new Rectangle(x, y, Width, Height);
             Color = Color.White;
-            Texture = GameScene.blockTexture;
+            Texture = GameScene.BlockTexture;
         }
 
         public void Draw(SpriteBatch spriteBatch)

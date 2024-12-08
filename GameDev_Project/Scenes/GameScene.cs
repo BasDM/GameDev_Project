@@ -19,18 +19,18 @@ namespace GameDev_Project.Scenes
     {
         Texture2D heroTexture;
         Texture2D enemyTexture;
-        public static Hero hero;
-        static Enemy enemy;
+        public static Hero Hero;
+        public static Enemy Enemy;
         UserInterface ui;
 
         //Tiles
         List<Block> blocks = new List<Block>();
-        public static Texture2D blockTexture;
+        public static Texture2D BlockTexture;
 
         //Background
-        public static Rectangle screen;
-        public static Texture2D backgroundTexture;
-        public Background background;
+        public static Rectangle Screen;
+        public static Texture2D BackgroundTexture;
+        public Background Background;
 
         //Sounds
         private SoundEffect slashEffect;
@@ -59,8 +59,8 @@ namespace GameDev_Project.Scenes
         public override void LoadContent()
         {
             heroTexture = game.Content.Load<Texture2D>("NightBorne");
-            blockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
-            backgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
+            BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
+            BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
             enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
 
             //Sounds
@@ -68,17 +68,17 @@ namespace GameDev_Project.Scenes
             slashEffectInstance = slashEffect.CreateInstance();
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
-            hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
-            enemy = new Enemy(enemyTexture,game.GraphicsDevice,hero);
+            Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
+            Enemy = new Enemy(enemyTexture,game.GraphicsDevice,Hero);
 
             CreateBlocks();
-            CollisionHandler.AddCharacter(hero);
+            CollisionHandler.AddCharacter(Hero);
 
-            ui = new UserInterface(hero, game.Content, 20, 20, new Vector2(10, 10));
-            background = new Background();
+            ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
+            Background = new Background();
 
             //Camera and screen
-            screen = new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
+            Screen = new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
             camera = new FollowingCamera(Vector2.Zero);
 
             //Music
@@ -95,11 +95,11 @@ namespace GameDev_Project.Scenes
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                hero.ChangeInput(new KeyboardReader());
+                Hero.ChangeInput(new KeyboardReader());
             }
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                hero.ChangeInput(new MouseReader());
+                Hero.ChangeInput(new MouseReader());
             }
 
             //Attack sound effect
@@ -124,9 +124,9 @@ namespace GameDev_Project.Scenes
                 MediaPlayer.Play(themeSong);
             }
 
-            hero.Update(gameTime);
-            enemy.Update(gameTime);
-            camera.Follow(hero.Position, new Rectangle(0, 0, screen.Width, screen.Height));
+            Hero.Update(gameTime);
+            Enemy.Update(gameTime);
+            camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
         }
 
@@ -137,13 +137,13 @@ namespace GameDev_Project.Scenes
             Matrix cameraTransform = Matrix.CreateTranslation(new Vector3(-camera.Position, 0));
 
             _spriteBatch.Begin(transformMatrix: cameraTransform, samplerState: SamplerState.PointClamp);
-            background.Draw(_spriteBatch, backgroundTexture, camera.Position, screen);
+            Background.Draw(_spriteBatch, BackgroundTexture, camera.Position, Screen);
             foreach (var item in blocks)
             {
                 item.Draw(_spriteBatch);
             }
-            hero.Draw(_spriteBatch);
-            enemy.Draw(_spriteBatch);
+            Hero.Draw(_spriteBatch);
+            Enemy.Draw(_spriteBatch);
             _spriteBatch.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);

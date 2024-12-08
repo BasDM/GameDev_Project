@@ -38,7 +38,7 @@ namespace GameDev_Project.Characters
         public int MaxHealth { get; set; }
         public bool Dead { get; set; }
 
-        private float damageCooldown = 5f;
+        public float ImmunityTimer { get; set; } = 0f;
 
         public Character()
         {
@@ -49,19 +49,15 @@ namespace GameDev_Project.Characters
             Gravity = 1f;
         }
 
-        //TODO: Use GetHit when player gets hit by enemy
         public void GetHit(int damage)
         {
-            if(damageCooldown > 0)
+            if (ImmunityTimer > 0)
             {
-                damageCooldown--;
-                return;
+                return; // Hero is immune, do not apply damage
             }
-            if(damageCooldown == 0)
-            {
-                Health -= damage;
-                damageCooldown = 5f;
-            }
+
+            Health -= damage;
+            ImmunityTimer = 2f; // Start immunity timer
 
             if (Health <= 0)
             {
