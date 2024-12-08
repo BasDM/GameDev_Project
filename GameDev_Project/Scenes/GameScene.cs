@@ -69,7 +69,7 @@ namespace GameDev_Project.Scenes
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
-            Enemy = new Enemy(enemyTexture,game.GraphicsDevice,Hero);
+            Enemy = new Enemy(new Vector2(400,20),enemyTexture,game.GraphicsDevice,Hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
@@ -142,8 +142,8 @@ namespace GameDev_Project.Scenes
             {
                 item.Draw(_spriteBatch);
             }
-            Hero.Draw(_spriteBatch);
             Enemy.Draw(_spriteBatch);
+            Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);

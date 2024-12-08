@@ -6,34 +6,33 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Linq;
 
 namespace GameDev_Project.Characters
 {
     public class Enemy : Character, IGameObject
     {
-        private Hero toFollow;
-        private const float followRange = 300.0f;
-        private Texture2D enemyTexture;
+        private Hero _hero;
+        private const float _followRange = 300.0f;
+        private Texture2D _enemyTexture;
 
-        private Animation currentAnimation;
-        private Animation idleAnimation;
-        private Animation walkingAnimation;
+        private Animation _currentAnimation;
+        private Animation _idleAnimation;
+        private Animation _walkingAnimation;
 
-        private float direction;
+        private float _direction;
 
-        public Enemy(Texture2D _enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
+        public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
         {
-            toFollow = hero;
+            _hero = hero;
 
             this.Width = 64;
             this.Height = 64;
 
-            this.enemyTexture = _enemyTexture;
+            this._enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
-            this.Position = new Vector2(400, 20);
+            this.Position = startPosition;
             
             this.Speed = new Vector2(0, 0);
             this.Acceleration = new Vector2(0.9f, 0.9f);
@@ -52,10 +51,10 @@ namespace GameDev_Project.Characters
         public void Move()
         {
             //===Follow logic===
-            if (Math.Abs(this.Position.X - toFollow.Position.X) <= followRange)
+            if (Math.Abs(this.Position.X - _hero.Position.X) <= _followRange)
             {
-                direction = Math.Sign(toFollow.Position.X - this.Position.X); // -1 for left, +1 for right
-                this.Speed = new Vector2(direction * MaxHorizontalSpeed, this.Speed.Y);
+                _direction = Math.Sign(_hero.Position.X - this.Position.X); // -1 for left, +1 for right
+                this.Speed = new Vector2(_direction * MaxHorizontalSpeed, this.Speed.Y);
             }
             else
             {
@@ -104,20 +103,20 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, this.BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(enemyTexture, new Rectangle((int)this.Position.X, (int)this.Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0,new Vector2(0,0), horizontalFlip, 0f);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)this.Position.X, (int)this.Position.Y, Width, Height), _currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0,new Vector2(0,0), horizontalFlip, 0f);
         }
 
         public override void Update(GameTime gameTime)
         {
             Move();
-            if(direction == 0)
+            if(_direction == 0)
             {
-                currentAnimation = idleAnimation;
+                _currentAnimation = _idleAnimation;
             }
             else
             {
-                currentAnimation = walkingAnimation;
-                if (direction == -1)
+                _currentAnimation = _walkingAnimation;
+                if (_direction == -1)
                     horizontalFlip = SpriteEffects.FlipHorizontally;
                 else
                     horizontalFlip = SpriteEffects.None;
@@ -128,25 +127,25 @@ namespace GameDev_Project.Characters
                 GameScene.Hero.GetHit(1);
             }
 
-            currentAnimation.Update(gameTime);
+            _currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)this.Position.X + 15, (int)this.Position.Y + 16, Width - 35, Height - 30);
         }
 
         public void AddIdleAnimation()
         {
-            idleAnimation = new Animation();
+            _idleAnimation = new Animation();
             for (int i = 0; i < 4; i++)
             {
-                idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 192, Width, Height)));
+                _idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 192, Width, Height)));
             }
         }
 
         public void AddWalkingAnimation()
         {
-            walkingAnimation = new Animation();
+            _walkingAnimation = new Animation();
             for (int i = 0; i < 12; i++)
             {
-                walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 128, Width, Height)));
+                _walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 128, Width, Height)));
             }
         }
     }

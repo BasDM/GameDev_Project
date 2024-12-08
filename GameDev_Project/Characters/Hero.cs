@@ -20,10 +20,10 @@ namespace GameDev_Project.Characters
         Animation attackAnimation;
 
         //jump vars
-        private int counter = 0;
-        private bool isJumping = false;
+        private int _counter = 0;
+        private bool _isJumping = false;
 
-        private IInputReader inputReader;
+        private IInputReader _inputReader;
         #endregion
         
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
@@ -39,7 +39,7 @@ namespace GameDev_Project.Characters
             Height = 80;
 
             heroTexture = texture;
-            this.inputReader = inputReader;
+            this._inputReader = inputReader;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
@@ -62,12 +62,12 @@ namespace GameDev_Project.Characters
             }
 
             Move();
-            if (inputReader.ReadInput().X == 0 && inputReader.ReadInput().Y == 0)
+            if (_inputReader.ReadInput().X == 0 && _inputReader.ReadInput().Y == 0)
                 currentAnimation = idleAnimation;
             else
             {
                 currentAnimation = walkingAnimation;
-                if (inputReader.ReadInput().X == -1)
+                if (_inputReader.ReadInput().X == -1)
                 {
                     horizontalFlip = SpriteEffects.FlipHorizontally;
                 }
@@ -77,13 +77,18 @@ namespace GameDev_Project.Characters
                 }
             }
 
+            if (Dead)
+            {
+                currentAnimation = deathAnimation;
+            }
+
             currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
         }
 
         public void Move()
         {
-            Vector2 direction = inputReader.ReadInput();
+            Vector2 direction = _inputReader.ReadInput();
 
             // === Horizontal Movement ===
             if (direction.X != 0)
@@ -101,16 +106,16 @@ namespace GameDev_Project.Characters
             }
 
             // Apply gravity
-            if (isJumping && counter < 5)
+            if (_isJumping && _counter < 5)
             {
                 Speed = new Vector2(Speed.X, 0.8f * Speed.Y);
-                counter++;
+                _counter++;
             }
             else
             {
                 Speed = new Vector2(Speed.X, Speed.Y + Gravity);
-                counter = 0;
-                isJumping = false;
+                _counter = 0;
+                _isJumping = false;
             }
 
             // Clamp speeds
@@ -143,17 +148,17 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
-            if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !isJumping)
+            if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !_isJumping)
             {
-                isJumping = false;
-                counter = 0;
+                _isJumping = false;
+                _counter = 0;
                 IsOnGround = true;
                 verticalMovement = 0;
             }
             else if(verticalCollidables.Any(o => BoundingBox.Top >= o.BoundingBox.Bottom))
             {
-                isJumping = false;
-                counter = 0;
+                _isJumping = false;
+                _counter = 0;
                 IsOnGround = false;
                 verticalMovement = Gravity;
             }
@@ -164,7 +169,7 @@ namespace GameDev_Project.Characters
                 IsOnGround = false;
                 verticalMovement = -20f;
                 Speed = new Vector2(Speed.X,verticalMovement);
-                isJumping = true;
+                _isJumping = true;
             }
 
             Speed = new Vector2(Speed.X, verticalMovement);
@@ -182,7 +187,7 @@ namespace GameDev_Project.Characters
 
         public void ChangeInput(IInputReader inputReader)
         {
-            this.inputReader = inputReader;
+            this._inputReader = inputReader;
         }
 
         public bool Intersects(IGameObject other)
