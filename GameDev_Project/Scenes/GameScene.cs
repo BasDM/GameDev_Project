@@ -17,7 +17,8 @@ namespace GameDev_Project.Scenes
 {
     public class GameScene : Scene
     {
-        Texture2D texture;
+        Texture2D heroTexture;
+        Texture2D enemyTexture;
         Hero hero;
         Enemy enemy;
         UserInterface ui;
@@ -57,17 +58,18 @@ namespace GameDev_Project.Scenes
 
         public override void LoadContent()
         {
-            texture = game.Content.Load<Texture2D>("NightBorne");
+            heroTexture = game.Content.Load<Texture2D>("NightBorne");
             blockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
             backgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
+            enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
             slashEffectInstance = slashEffect.CreateInstance();
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
-            hero = new Hero(texture, new KeyboardReader(), game.GraphicsDevice);
-            enemy = new Enemy(game.GraphicsDevice,hero);
+            hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
+            enemy = new Enemy(enemyTexture,game.GraphicsDevice,hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(hero);

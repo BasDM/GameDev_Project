@@ -24,10 +24,6 @@ namespace GameDev_Project.Characters
         private bool isJumping = false;
 
         private IInputReader inputReader;
-        private SpriteEffects horizontalFlip = SpriteEffects.None;
-
-        private int width = 80;
-        private int height = 80;
         #endregion
         
         public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
@@ -39,11 +35,14 @@ namespace GameDev_Project.Characters
             MaxVerticalSpeed = 80;
             MaxHorizontalSpeed = 4;
 
+            Width = 80;
+            Height = 80;
+
             heroTexture = texture;
             this.inputReader = inputReader;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
-            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
+            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
 
             //Health
             Health = 5;
@@ -74,7 +73,7 @@ namespace GameDev_Project.Characters
             }
 
             currentAnimation.Update(gameTime);
-            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, width - 50, height - 50);
+            BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
         }
 
         public void Move()
@@ -173,7 +172,7 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X, (int)Position.Y, width, height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
@@ -192,7 +191,7 @@ namespace GameDev_Project.Characters
             walkingAnimation = new Animation();
             for (int i = 0; i < 6; i++)
             {
-                walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height, width, height)));
+                walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height, Width, Height)));
             }
         }
         public void AddIdleAnimation()
@@ -200,7 +199,7 @@ namespace GameDev_Project.Characters
             idleAnimation = new Animation();
             for (int i = 0; i < 9; i++)
             {
-                idleAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, 0, width, height)));
+                idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 0, Width, Height)));
             }
         }
         public void AddDeathAnimation()
@@ -208,7 +207,7 @@ namespace GameDev_Project.Characters
             deathAnimation = new Animation();
             for (int i = 0; i < 22; i++)
             {
-                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height * 4, width, height)));
+                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 4, Width, Height)));
             }
         }
         public void AddAttackAnimation()
@@ -216,7 +215,7 @@ namespace GameDev_Project.Characters
             attackAnimation = new Animation();
             for (int i = 0; i < 12; i++)
             {
-                attackAnimation.AddFrame(new AnimationFrame(new Rectangle(width * i, height * 3, width, height)));
+                attackAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 3, Width, Height)));
             }
         }
         #endregion
