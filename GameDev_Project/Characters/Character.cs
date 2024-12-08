@@ -21,6 +21,13 @@ namespace GameDev_Project.Characters
         //physics
         public float gravity { get; set; }
 
+        //speed
+        public Vector2 speed { get; set; }
+        public float MaxVerticalSpeed { get; set; }
+        public float MaxHorizontalSpeed { get; set; }
+        public Vector2 _acceleration { get; set; }
+        public float AccelerationMultiplier { get; set; } = 0.5f;
+
         public int width { get; set; }
         public int height { get; set; }
         public int health { get; set; }
@@ -56,8 +63,25 @@ namespace GameDev_Project.Characters
             return BoundingBox.Intersects(other.BoundingBox);
         }
 
-        public abstract void Update(GameTime gameTime);
+        public Vector2 Limit(Vector2 v, float min, float max)
+        {
+            float length = v.Length();
 
-        public abstract void HaltMovement(ICollidable other);
+            if (length > max)
+            {
+                float ratio = max / length;
+                v.X *= ratio;
+                v.Y *= ratio;
+            }
+            else if (length < min && length > 0)
+            {
+                float ratio = min / length;
+                v.X *= ratio;
+                v.Y *= ratio;
+            }
+            return v;
+        }
+
+        public abstract void Update(GameTime gameTime);
     }
 }
