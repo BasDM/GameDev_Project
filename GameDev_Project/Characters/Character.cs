@@ -38,6 +38,8 @@ namespace GameDev_Project.Characters
         public int MaxHealth { get; set; }
         public bool Dead { get; set; }
 
+        private float damageCooldown = 5f;
+
         public Character()
         {
             //make health 1 and maxHealth refer to health so I only need to change 1 value
@@ -50,7 +52,17 @@ namespace GameDev_Project.Characters
         //TODO: Use GetHit when player gets hit by enemy
         public void GetHit(int damage)
         {
-            Health -= damage;
+            if(damageCooldown > 0)
+            {
+                damageCooldown--;
+                return;
+            }
+            if(damageCooldown == 0)
+            {
+                Health -= damage;
+                damageCooldown = 5f;
+            }
+
             if (Health <= 0)
             {
                 Dead = true;

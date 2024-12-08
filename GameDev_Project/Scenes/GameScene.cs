@@ -19,8 +19,8 @@ namespace GameDev_Project.Scenes
     {
         Texture2D heroTexture;
         Texture2D enemyTexture;
-        Hero hero;
-        Enemy enemy;
+        public static Hero hero;
+        static Enemy enemy;
         UserInterface ui;
 
         //Tiles

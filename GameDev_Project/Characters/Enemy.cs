@@ -123,6 +123,11 @@ namespace GameDev_Project.Characters
                     horizontalFlip = SpriteEffects.None;
             }
 
+            if (BoundingBox.Intersects(GameScene.hero.BoundingBox))
+            {
+                GameScene.hero.GetHit(1);
+            }
+
             currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)this.Position.X + 15, (int)this.Position.Y + 16, Width - 35, Height - 30);
         }
