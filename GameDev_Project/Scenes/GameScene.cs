@@ -75,7 +75,7 @@ namespace GameDev_Project.Scenes
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
-            runawayEnemy = new RunawayEnemy(new Vector2(600,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
+            runawayEnemy = new RunawayEnemy(new Vector2(200,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
@@ -156,6 +156,7 @@ namespace GameDev_Project.Scenes
 
             Enemy.Draw(_spriteBatch);
             enemyHealthBar.Draw(_spriteBatch);
+            runawayEnemy.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 

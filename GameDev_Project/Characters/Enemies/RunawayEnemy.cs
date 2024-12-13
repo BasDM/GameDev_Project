@@ -18,10 +18,8 @@ namespace GameDev_Project.Characters.Enemies
         public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero) : base(startPosition, enemyTexture, graphicsDevice, hero)
         {
             _hero = hero;
-            Width = 64;
-            Height = 64;
-
-            currentAnimation = _idleAnimation;
+            Width = 16;
+            Height = 16;
 
             _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
@@ -37,10 +35,12 @@ namespace GameDev_Project.Characters.Enemies
             MaxHealth = Health;
             Dead = false;
             Gravity = 1f;
-            BoundingBox = new Rectangle((int)Position.X + 15, (int)Position.Y + 16, Width - 35, Height - 30);
+            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
 
             AddIdleAnimation();
             AddRunAnimation();
+
+            currentAnimation = _idleAnimation;
         }
         public void Update()
         {
@@ -70,6 +70,7 @@ namespace GameDev_Project.Characters.Enemies
             {
                 Speed = new Vector2(0, Speed.Y);
             }
+            base.Move();
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -77,14 +78,14 @@ namespace GameDev_Project.Characters.Enemies
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), this.currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, 64, 64), currentAnimation.CurrentFrame.SourceRectangle, Color.White,0, new Vector2(0, 0), horizontalFlip,0f);
         }
 
         #region Animations
         public void AddIdleAnimation()
         {
             _idleAnimation = new Animation();
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 6; i++)
             {
                 _idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 16, Width, Height)));
             }
@@ -92,7 +93,7 @@ namespace GameDev_Project.Characters.Enemies
         public void AddRunAnimation()
         {
             _runAnimation = new Animation();
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 8; i++)
             {
                 _runAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 0, Width, Height)));
             }
