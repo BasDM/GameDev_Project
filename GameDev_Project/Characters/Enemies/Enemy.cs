@@ -1,34 +1,33 @@
 ﻿using GameDev_Project.AnimationLogic;
-using GameDev_Project.Events;
 using GameDev_Project.Interfaces;
 using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GameDev_Project.Characters.Enemies
 {
     public class Enemy : Character, IGameObject
     {
-        private Hero _hero;
+        public Hero _hero;
         private const float _followRange = 300.0f;
-        private Texture2D _enemyTexture;
+        public Texture2D _enemyTexture;
 
-        private Animation _currentAnimation;
         private Animation _idleAnimation;
         private Animation _walkingAnimation;
 
-        private float _direction;
+        public float _direction;
 
-        public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
+        public EnemyHealthBar _enemyHealthBar;
+
+        public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero, EnemyHealthBar healthBar)
         {
             _hero = hero;
 
             Width = 64;
             Height = 64;
 
+            _enemyHealthBar = healthBar;
             _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
@@ -48,7 +47,7 @@ namespace GameDev_Project.Characters.Enemies
             AddIdleAnimation();
             AddWalkingAnimation();
         }
-        public void Move()
+        public override void Move()
         {
             //===Follow logic===
             if (Math.Abs(Position.X - _hero.Position.X) <= _followRange)
@@ -60,41 +59,7 @@ namespace GameDev_Project.Characters.Enemies
             {
                 Speed = new Vector2(0, Speed.Y);
             }
-
-            Speed = new Vector2(Speed.X, Speed.Y + Gravity);
-            Speed = new Vector2(Math.Clamp(Speed.X, -4, MaxHorizontalSpeed), Math.Clamp(Speed.Y, -30, MaxVerticalSpeed));
-
-            float horizontalMovement = Speed.X;
-            Rectangle futureHorizontalBoundingBox = new Rectangle(
-                (int)(BoundingBox.X + horizontalMovement),
-                BoundingBox.Y,
-                BoundingBox.Width,
-                BoundingBox.Height
-            );
-
-            List<ICollidable> horizontalCollidables = CollisionHandler.CollidingWithObject(futureHorizontalBoundingBox);
-            if (horizontalCollidables.Any(o => futureHorizontalBoundingBox.Intersects(o.BoundingBox)))
-            {
-                horizontalMovement = 0;
-            }
-
-            float verticalMovement = Speed.Y;
-            Rectangle futureVerticalBoundingBox = new Rectangle(
-                BoundingBox.X,
-                (int)(BoundingBox.Y + verticalMovement),
-                BoundingBox.Width,
-                BoundingBox.Height
-            );
-
-            List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
-            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top))
-                verticalMovement = 0;
-            else
-                verticalMovement += Gravity;
-
-            // Update speed and position
-            Speed = new Vector2(horizontalMovement, verticalMovement);
-            Position += Speed;
+            base.Move();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -103,7 +68,8 @@ namespace GameDev_Project.Characters.Enemies
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), _currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            _enemyHealthBar.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -111,20 +77,16 @@ namespace GameDev_Project.Characters.Enemies
             Move();
             if (_direction == 0)
             {
-                _currentAnimation = _idleAnimation;
+                currentAnimation = _idleAnimation;
             }
             else
             {
-                _currentAnimation = _walkingAnimation;
+                currentAnimation = _walkingAnimation;
                 if (_direction == -1)
                     horizontalFlip = SpriteEffects.FlipHorizontally;
                 else
                     horizontalFlip = SpriteEffects.None;
             }
-
-            Attack(GameScene.Hero);
-
-            _currentAnimation.Update(gameTime);
 
             // Update BoundingBox position
             BoundingBox = new Rectangle((int)Position.X + 15, (int)Position.Y + 16, Width - 35, Height - 30);
@@ -134,8 +96,13 @@ namespace GameDev_Project.Characters.Enemies
             {
                 ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
+
+            Attack(GameScene.Hero);
+            currentAnimation.Update(gameTime);
+            _enemyHealthBar.Update(gameTime);
         }
 
+        #region Animations
         public void AddIdleAnimation()
         {
             _idleAnimation = new Animation();
@@ -153,5 +120,6 @@ namespace GameDev_Project.Characters.Enemies
                 _walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 128, Width, Height)));
             }
         }
+        #endregion
     }
 }

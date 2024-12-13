@@ -14,7 +14,6 @@ namespace GameDev_Project.Characters
     {
         #region Variables
         Texture2D heroTexture;
-        Animation currentAnimation;
         Animation walkingAnimation;
         Animation idleAnimation;
         Animation deathAnimation;
@@ -83,13 +82,12 @@ namespace GameDev_Project.Characters
                 currentAnimation = deathAnimation;
             }
 
-            Attack(GameScene.Enemy);
 
             currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
         }
 
-        public void Move()
+        public override void Move()
         {
             Vector2 direction = _inputReader.ReadInput();
 

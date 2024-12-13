@@ -19,12 +19,13 @@ namespace GameDev_Project.Scenes
     {
         Texture2D heroTexture;
         Texture2D enemyTexture;
+        Texture2D runawayEnemyTexture;
         public static Hero Hero;
         public static Enemy Enemy;
+        public static RunawayEnemy runawayEnemy;
         UserInterface ui;
         EnemyHealthBar enemyHealthBar;
-
-        List<Character> enemies = new List<Character>();
+        EnemyHealthBar runawayEnemyHealthBar;
 
         //Tiles
         List<Block> blocks = new List<Block>();
@@ -65,6 +66,7 @@ namespace GameDev_Project.Scenes
             BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
             BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
             enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
+            runawayEnemyTexture = game.Content.Load<Texture2D>("mushroom_spritesheet");
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
@@ -72,13 +74,15 @@ namespace GameDev_Project.Scenes
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
-            Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
+            Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero, enemyHealthBar);
+            runawayEnemy = new RunawayEnemy(new Vector2(600,20), runawayEnemyTexture, game.GraphicsDevice, Hero, runawayEnemyHealthBar);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
             enemyHealthBar = new EnemyHealthBar(Enemy, game.Content, 20, 20);
+            runawayEnemyHealthBar = new EnemyHealthBar(runawayEnemy, game.Content, 20, 20);
             Background = new Background();
 
             //Camera and screen
@@ -113,6 +117,7 @@ namespace GameDev_Project.Scenes
                 {
                     slashEffectInstance.Volume = soundEffectVolume;
                     slashEffectInstance.Play();
+                    Hero.Attack(Enemy);
                 }
             }
 
@@ -130,7 +135,7 @@ namespace GameDev_Project.Scenes
 
             Hero.Update(gameTime);
             Enemy.Update(gameTime);
-            enemyHealthBar.Update(gameTime);
+            runawayEnemy.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
         }
@@ -149,7 +154,7 @@ namespace GameDev_Project.Scenes
             }
 
             Enemy.Draw(_spriteBatch);
-            enemyHealthBar.Draw(_spriteBatch);
+            //runawayEnemy.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 

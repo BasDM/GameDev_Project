@@ -1,9 +1,12 @@
-﻿using GameDev_Project.Interfaces;
+﻿using GameDev_Project.AnimationLogic;
+using GameDev_Project.Events;
+using GameDev_Project.Interfaces;
 using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameDev_Project.Characters
 {
@@ -16,6 +19,7 @@ namespace GameDev_Project.Characters
         public Texture2D Texture { get; set; }
         public SpriteEffects horizontalFlip = SpriteEffects.None;
         public Vector2 Position { get; set; } = new Vector2(0, 0);
+        public Animation currentAnimation { get; set; }
 
         //collision
         public ICollidable CollidingWith { get; set; }
@@ -104,5 +108,43 @@ namespace GameDev_Project.Characters
         }
 
         public abstract void Update(GameTime gameTime);
+        
+        public virtual void Move()
+        {
+            Speed = new Vector2(Speed.X, Speed.Y + Gravity);
+            Speed = new Vector2(Math.Clamp(Speed.X, -4, MaxHorizontalSpeed), Math.Clamp(Speed.Y, -30, MaxVerticalSpeed));
+
+            float horizontalMovement = Speed.X;
+            Rectangle futureHorizontalBoundingBox = new Rectangle(
+                (int)(BoundingBox.X + horizontalMovement),
+                BoundingBox.Y,
+                BoundingBox.Width,
+                BoundingBox.Height
+            );
+
+            List<ICollidable> horizontalCollidables = CollisionHandler.CollidingWithObject(futureHorizontalBoundingBox);
+            if (horizontalCollidables.Any(o => futureHorizontalBoundingBox.Intersects(o.BoundingBox)))
+            {
+                horizontalMovement = 0;
+            }
+
+            float verticalMovement = Speed.Y;
+            Rectangle futureVerticalBoundingBox = new Rectangle(
+                BoundingBox.X,
+                (int)(BoundingBox.Y + verticalMovement),
+                BoundingBox.Width,
+                BoundingBox.Height
+            );
+
+            List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
+            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top))
+                verticalMovement = 0;
+            else
+                verticalMovement += Gravity;
+
+            // Update speed and position
+            Speed = new Vector2(horizontalMovement, verticalMovement);
+            Position += Speed;
+        }
     }
 }

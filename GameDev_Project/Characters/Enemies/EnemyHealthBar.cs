@@ -8,7 +8,6 @@ namespace GameDev_Project.Characters.Enemies
     {
         private Enemy enemy;
         private int heartWidth;
-        private int heartHeight;
         private Vector2 heartPosition;
         private Texture2D heartTexture;
 
