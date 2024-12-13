@@ -1,6 +1,7 @@
 ﻿using GameDev_Project.AnimationLogic;
 using GameDev_Project.Events;
 using GameDev_Project.Interfaces;
+using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -81,6 +82,8 @@ namespace GameDev_Project.Characters
             {
                 currentAnimation = deathAnimation;
             }
+
+            Attack(GameScene.Enemy);
 
             currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);

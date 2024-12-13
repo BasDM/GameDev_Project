@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.Interfaces;
+using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -62,6 +63,14 @@ namespace GameDev_Project.Characters
             if (Health <= 0)
             {
                 Dead = true;
+            }
+        }
+
+        public void Attack(Character other)
+        {
+            if (BoundingBox.Intersects(other.BoundingBox) && other.ImmunityTimer <= 0)
+            {
+                other.GetHit(1);
             }
         }
 

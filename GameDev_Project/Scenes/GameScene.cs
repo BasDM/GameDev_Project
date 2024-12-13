@@ -13,8 +13,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace GameDev_Project.Scenes
 {
     public class GameScene : Scene
@@ -115,10 +113,6 @@ namespace GameDev_Project.Scenes
                 {
                     slashEffectInstance.Volume = soundEffectVolume;
                     slashEffectInstance.Play();
-                    if (Enemy.BoundingBox.Intersects(Hero.BoundingBox))
-                    {
-                        Enemy.GetHit(1);
-                    }
                 }
             }
 
