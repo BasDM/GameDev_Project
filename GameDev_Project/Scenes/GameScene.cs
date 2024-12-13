@@ -1,6 +1,7 @@
 ﻿using GameDev_Project.AreaGameComponents;
 using GameDev_Project.Camera_s;
 using GameDev_Project.Characters;
+using GameDev_Project.Characters.Enemies;
 using GameDev_Project.Events;
 using GameDev_Project.Factories;
 using GameDev_Project.GameComponents;
@@ -22,6 +23,7 @@ namespace GameDev_Project.Scenes
         public static Hero Hero;
         public static Enemy Enemy;
         UserInterface ui;
+        EnemyHealthBar enemyHealthBar;
 
         //Tiles
         List<Block> blocks = new List<Block>();
@@ -75,6 +77,7 @@ namespace GameDev_Project.Scenes
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
+            enemyHealthBar = new EnemyHealthBar(Enemy, game.Content, 20, 20);
             Background = new Background();
 
             //Camera and screen
@@ -126,6 +129,7 @@ namespace GameDev_Project.Scenes
 
             Hero.Update(gameTime);
             Enemy.Update(gameTime);
+            enemyHealthBar.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
         }
@@ -143,6 +147,7 @@ namespace GameDev_Project.Scenes
                 item.Draw(_spriteBatch);
             }
             Enemy.Draw(_spriteBatch);
+            enemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 

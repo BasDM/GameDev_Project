@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GameDev_Project.Characters
+namespace GameDev_Project.Characters.Enemies
 {
     public class Enemy : Character, IGameObject
     {
@@ -26,24 +26,24 @@ namespace GameDev_Project.Characters
         {
             _hero = hero;
 
-            this.Width = 64;
-            this.Height = 64;
+            Width = 64;
+            Height = 64;
 
-            this._enemyTexture = enemyTexture;
+            _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
-            this.Position = startPosition;
-            
-            this.Speed = new Vector2(0, 0);
-            this.Acceleration = new Vector2(0.9f, 0.9f);
-            this.MaxHorizontalSpeed = 2;
-            this.MaxVerticalSpeed = 80;
+            Position = startPosition;
 
-            this.Health = 2;
-            this.MaxHealth = Health;
-            this.Dead = false;
-            this.Gravity = 1f;
-            this.BoundingBox = new Rectangle((int)this.Position.X + 15, (int)this.Position.Y + 16, Width - 35, Height -30);
+            Speed = new Vector2(0, 0);
+            Acceleration = new Vector2(0.9f, 0.9f);
+            MaxHorizontalSpeed = 2;
+            MaxVerticalSpeed = 80;
+
+            Health = 2;
+            MaxHealth = Health;
+            Dead = false;
+            Gravity = 1f;
+            BoundingBox = new Rectangle((int)Position.X + 15, (int)Position.Y + 16, Width - 35, Height - 30);
 
             AddIdleAnimation();
             AddWalkingAnimation();
@@ -51,17 +51,17 @@ namespace GameDev_Project.Characters
         public void Move()
         {
             //===Follow logic===
-            if (Math.Abs(this.Position.X - _hero.Position.X) <= _followRange)
+            if (Math.Abs(Position.X - _hero.Position.X) <= _followRange)
             {
-                _direction = Math.Sign(_hero.Position.X - this.Position.X); // -1 for left, +1 for right
-                this.Speed = new Vector2(_direction * MaxHorizontalSpeed, this.Speed.Y);
+                _direction = Math.Sign(_hero.Position.X - Position.X); // -1 for left, +1 for right
+                Speed = new Vector2(_direction * MaxHorizontalSpeed, Speed.Y);
             }
             else
             {
-                this.Speed = new Vector2(0, this.Speed.Y);
+                Speed = new Vector2(0, Speed.Y);
             }
 
-            this.Speed = new Vector2(this.Speed.X, this.Speed.Y + Gravity);
+            Speed = new Vector2(Speed.X, Speed.Y + Gravity);
             Speed = new Vector2(Math.Clamp(Speed.X, -4, MaxHorizontalSpeed), Math.Clamp(Speed.Y, -30, MaxVerticalSpeed));
 
             float horizontalMovement = Speed.X;
@@ -87,7 +87,7 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
-            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && this.Position.Y <= o.BoundingBox.Top))
+            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top))
                 verticalMovement = 0;
             else
                 verticalMovement += Gravity;
@@ -101,15 +101,15 @@ namespace GameDev_Project.Characters
         {
             if (Debug)
             {
-                spriteBatch.Draw(Texture, this.BoundingBox, Color.Red);
+                spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)this.Position.X, (int)this.Position.Y, Width, Height), _currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0,new Vector2(0,0), horizontalFlip, 0f);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), _currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public override void Update(GameTime gameTime)
         {
             Move();
-            if(_direction == 0)
+            if (_direction == 0)
             {
                 _currentAnimation = _idleAnimation;
             }
@@ -128,7 +128,7 @@ namespace GameDev_Project.Characters
             }
 
             _currentAnimation.Update(gameTime);
-            BoundingBox = new Rectangle((int)this.Position.X + 15, (int)this.Position.Y + 16, Width - 35, Height - 30);
+            BoundingBox = new Rectangle((int)Position.X + 15, (int)Position.Y + 16, Width - 35, Height - 30);
         }
 
         public void AddIdleAnimation()

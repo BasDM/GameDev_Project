@@ -53,7 +53,7 @@ namespace GameDev_Project.Characters
         {
             if (ImmunityTimer > 0)
             {
-                return; // Hero is immune, do not apply damage
+                return; // Character is immune, do not apply damage
             }
 
             Health -= damage;
