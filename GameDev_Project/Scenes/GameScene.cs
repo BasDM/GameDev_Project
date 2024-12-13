@@ -74,8 +74,8 @@ namespace GameDev_Project.Scenes
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
-            Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero, enemyHealthBar);
-            runawayEnemy = new RunawayEnemy(new Vector2(600,20), runawayEnemyTexture, game.GraphicsDevice, Hero, runawayEnemyHealthBar);
+            Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
+            runawayEnemy = new RunawayEnemy(new Vector2(600,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
@@ -135,6 +135,7 @@ namespace GameDev_Project.Scenes
 
             Hero.Update(gameTime);
             Enemy.Update(gameTime);
+            enemyHealthBar.Update(gameTime);
             runawayEnemy.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
@@ -154,7 +155,7 @@ namespace GameDev_Project.Scenes
             }
 
             Enemy.Draw(_spriteBatch);
-            //runawayEnemy.Draw(_spriteBatch);
+            enemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 

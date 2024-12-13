@@ -15,7 +15,7 @@ namespace GameDev_Project.Characters.Enemies
         private Animation _idleAnimation;
         private Animation _runAnimation;
         
-        public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero, EnemyHealthBar healthBar) : base(startPosition, enemyTexture, graphicsDevice, hero, healthBar)
+        public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero) : base(startPosition, enemyTexture, graphicsDevice, hero)
         {
             _hero = hero;
             Width = 64;
@@ -23,7 +23,6 @@ namespace GameDev_Project.Characters.Enemies
 
             currentAnimation = _idleAnimation;
 
-            _enemyHealthBar = healthBar;
             _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
@@ -74,7 +73,6 @@ namespace GameDev_Project.Characters.Enemies
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            _enemyHealthBar.Draw(spriteBatch);
             if (Debug)
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);

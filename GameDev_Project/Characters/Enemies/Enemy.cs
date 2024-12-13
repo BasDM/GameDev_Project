@@ -18,16 +18,13 @@ namespace GameDev_Project.Characters.Enemies
 
         public float _direction;
 
-        public EnemyHealthBar _enemyHealthBar;
-
-        public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero, EnemyHealthBar healthBar)
+        public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
         {
             _hero = hero;
 
             Width = 64;
             Height = 64;
 
-            _enemyHealthBar = healthBar;
             _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
             Texture.SetData(new[] { Color.White });
@@ -69,7 +66,6 @@ namespace GameDev_Project.Characters.Enemies
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
             spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
-            _enemyHealthBar.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -99,7 +95,6 @@ namespace GameDev_Project.Characters.Enemies
 
             Attack(GameScene.Hero);
             currentAnimation.Update(gameTime);
-            _enemyHealthBar.Update(gameTime);
         }
 
         #region Animations
