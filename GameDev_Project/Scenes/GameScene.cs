@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameDev_Project.Scenes
 {
@@ -24,6 +25,8 @@ namespace GameDev_Project.Scenes
         public static Enemy Enemy;
         UserInterface ui;
         EnemyHealthBar enemyHealthBar;
+
+        List<Character> enemies = new List<Character>();
 
         //Tiles
         List<Block> blocks = new List<Block>();
@@ -71,7 +74,7 @@ namespace GameDev_Project.Scenes
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
-            Enemy = new Enemy(new Vector2(400,20),enemyTexture,game.GraphicsDevice,Hero);
+            Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
@@ -150,6 +153,7 @@ namespace GameDev_Project.Scenes
             {
                 item.Draw(_spriteBatch);
             }
+
             Enemy.Draw(_spriteBatch);
             enemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);

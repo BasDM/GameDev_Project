@@ -128,7 +128,15 @@ namespace GameDev_Project.Characters.Enemies
             }
 
             _currentAnimation.Update(gameTime);
+
+            // Update BoundingBox position
             BoundingBox = new Rectangle((int)Position.X + 15, (int)Position.Y + 16, Width - 35, Height - 30);
+
+            // Decrement ImmunityTimer
+            if (ImmunityTimer > 0)
+            {
+                ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
         }
 
         public void AddIdleAnimation()
