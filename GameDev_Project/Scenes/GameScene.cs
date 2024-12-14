@@ -110,10 +110,12 @@ namespace GameDev_Project.Scenes
             {
                 Hero.ChangeInput(new KeyboardReader());
             }
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                Hero.ChangeInput(new MouseReader());
-            }
+
+            //-Optional-
+            //if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            //{
+            //    Hero.ChangeInput(new MouseReader());
+            //}
 
             //Attack sound effect
             if (Keyboard.GetState().IsKeyDown(Keys.Space))

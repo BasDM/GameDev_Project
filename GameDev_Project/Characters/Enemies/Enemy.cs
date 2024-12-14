@@ -43,6 +43,8 @@ namespace GameDev_Project.Characters.Enemies
 
             AddIdleAnimation();
             AddWalkingAnimation();
+
+            currentAnimation = _idleAnimation;
         }
         public override void Move()
         {

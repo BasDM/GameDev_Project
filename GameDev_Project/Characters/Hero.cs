@@ -13,11 +13,11 @@ namespace GameDev_Project.Characters
     public class Hero : Character, IGameObject
     {
         #region Variables
-        Texture2D heroTexture;
-        Animation walkingAnimation;
-        Animation idleAnimation;
-        Animation deathAnimation;
-        Animation attackAnimation;
+        Texture2D _heroTexture;
+        Animation _walkingAnimation;
+        Animation _idleAnimation;
+        Animation _deathAnimation;
+        Animation _attackAnimation;
 
         //jump vars
         private int _counter = 0;
@@ -38,7 +38,7 @@ namespace GameDev_Project.Characters
             Width = 80;
             Height = 80;
 
-            heroTexture = texture;
+            _heroTexture = texture;
             this._inputReader = inputReader;
             boundingBoxTexture = new Texture2D(graphicsDevice, 1, 1);
             boundingBoxTexture.SetData(new[] { Color.White });
@@ -52,6 +52,8 @@ namespace GameDev_Project.Characters
             AddIdleAnimation();
             AddDeathAnimation();
             AddAttackAnimation();
+
+            currentAnimation = _idleAnimation;
         }
 
         public override void Update(GameTime gameTime)
@@ -63,10 +65,10 @@ namespace GameDev_Project.Characters
 
             Move();
             if (_inputReader.ReadInput().X == 0 && _inputReader.ReadInput().Y == 0)
-                currentAnimation = idleAnimation;
+                currentAnimation = _idleAnimation;
             else
             {
-                currentAnimation = walkingAnimation;
+                currentAnimation = _walkingAnimation;
                 if (_inputReader.ReadInput().X == -1)
                 {
                     horizontalFlip = SpriteEffects.FlipHorizontally;
@@ -79,7 +81,7 @@ namespace GameDev_Project.Characters
 
             if (Dead)
             {
-                currentAnimation = deathAnimation;
+                currentAnimation = _deathAnimation;
             }
 
 
@@ -183,7 +185,7 @@ namespace GameDev_Project.Characters
             {
                 spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(_heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public void ChangeInput(IInputReader inputReader)
@@ -199,34 +201,34 @@ namespace GameDev_Project.Characters
         #region Animations
         public void AddWalkingAnimation()
         {
-            walkingAnimation = new Animation();
+            _walkingAnimation = new Animation();
             for (int i = 0; i < 6; i++)
             {
-                walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height, Width, Height)));
+                _walkingAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height, Width, Height)));
             }
         }
         public void AddIdleAnimation()
         {
-            idleAnimation = new Animation();
+            _idleAnimation = new Animation();
             for (int i = 0; i < 9; i++)
             {
-                idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 0, Width, Height)));
+                _idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 0, Width, Height)));
             }
         }
         public void AddDeathAnimation()
         {
-            deathAnimation = new Animation();
+            _deathAnimation = new Animation();
             for (int i = 0; i < 22; i++)
             {
-                deathAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 4, Width, Height)));
+                _deathAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 4, Width, Height)));
             }
         }
         public void AddAttackAnimation()
         {
-            attackAnimation = new Animation();
+            _attackAnimation = new Animation();
             for (int i = 0; i < 12; i++)
             {
-                attackAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 3, Width, Height)));
+                _attackAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, Height * 3, Width, Height)));
             }
         }
         #endregion
