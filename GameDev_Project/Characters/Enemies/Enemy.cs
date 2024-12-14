@@ -26,8 +26,8 @@ namespace GameDev_Project.Characters.Enemies
             Height = 64;
 
             _enemyTexture = enemyTexture;
-            Texture = new Texture2D(graphicsDevice, 1, 1);
-            Texture.SetData(new[] { Color.White });
+            boundingBoxTexture = new Texture2D(graphicsDevice, 1, 1);
+            boundingBoxTexture.SetData(new[] { Color.White });
             Position = startPosition;
 
             Speed = new Vector2(0, 0);
@@ -63,7 +63,7 @@ namespace GameDev_Project.Characters.Enemies
         {
             if (Debug)
             {
-                spriteBatch.Draw(Texture, BoundingBox, Color.Red);
+                spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
             }
             spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }

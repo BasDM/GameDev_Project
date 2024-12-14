@@ -40,8 +40,8 @@ namespace GameDev_Project.Characters
 
             heroTexture = texture;
             this._inputReader = inputReader;
-            Texture = new Texture2D(graphicsDevice, 1, 1);
-            Texture.SetData(new[] { Color.White });
+            boundingBoxTexture = new Texture2D(graphicsDevice, 1, 1);
+            boundingBoxTexture.SetData(new[] { Color.White });
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
 
             //Health
@@ -181,7 +181,7 @@ namespace GameDev_Project.Characters
         {
             if (Debug)
             {
-                spriteBatch.Draw(Texture, BoundingBox, Color.Red);
+                spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
             }
             spriteBatch.Draw(heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }

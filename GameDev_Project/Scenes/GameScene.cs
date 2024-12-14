@@ -75,7 +75,7 @@ namespace GameDev_Project.Scenes
 
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
-            runawayEnemy = new RunawayEnemy(new Vector2(200,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
+            runawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
 
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
@@ -141,6 +141,7 @@ namespace GameDev_Project.Scenes
             Enemy.Update(gameTime);
             enemyHealthBar.Update(gameTime);
             runawayEnemy.Update(gameTime);
+            runawayEnemyHealthBar.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
         }

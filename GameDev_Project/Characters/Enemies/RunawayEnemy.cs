@@ -10,20 +10,23 @@ using System.Threading.Tasks;
 
 namespace GameDev_Project.Characters.Enemies
 {
-    public class RunawayEnemy : Enemy
+    public class RunawayEnemy : Character
     {
         private const float _runawayRange = 200.0f;
         private Animation _runAnimation;
+        private Hero _hero;
+        public float _direction;
+        private Texture2D _enemyTexture;
         
-        public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero) : base(startPosition, enemyTexture, graphicsDevice, hero)
+        public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
         {
             _hero = hero;
             Width = 32;
             Height = 32;
 
             _enemyTexture = enemyTexture;
-            Texture = new Texture2D(graphicsDevice, 1, 1);
-            Texture.SetData(new[] { Color.White });
+            boundingBoxTexture = new Texture2D(graphicsDevice, 1, 1);
+            boundingBoxTexture.SetData(new[] { Color.White });
             Position = startPosition;
 
             Speed = new Vector2(0, 0);
@@ -71,10 +74,10 @@ namespace GameDev_Project.Characters.Enemies
         public override void Move()
         {
             //===Runaway Logic===
-            if (Math.Abs(_hero.Position.X - Position.X) <= _runawayRange)
+            if (Math.Abs(Position.X - _hero.Position.X) <= _runawayRange)
             {
-                _direction = Math.Sign(Position.X - _hero.Position.X );
-                Speed = new Vector2(_direction * MaxHorizontalSpeed, Speed.Y);
+                _direction = Math.Sign(_hero.Position.X - Position.X );
+                Speed = new Vector2(-_direction * MaxHorizontalSpeed, Speed.Y);
             }
             else
             {
@@ -87,7 +90,7 @@ namespace GameDev_Project.Characters.Enemies
         {
             if (Debug)
             {
-                spriteBatch.Draw(Texture, BoundingBox, Color.Red);
+                spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
             }
             spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White,0, new Vector2(0, 0), horizontalFlip,0f);
         }

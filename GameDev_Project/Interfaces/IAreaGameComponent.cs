@@ -5,7 +5,7 @@ namespace GameDev_Project.Interfaces
 {
     public interface IAreaGameComponent:ICollidable
     {
-        Texture2D Texture { get; set; }
+        Texture2D boundingBoxTexture { get; set; }
         void Draw(SpriteBatch spriteBatch);
     }
 }

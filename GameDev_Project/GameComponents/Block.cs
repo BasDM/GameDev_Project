@@ -11,7 +11,7 @@ namespace GameDev_Project.GameComponents
         public int Width { get; set; }
         public Rectangle BoundingBox { get; set; }
         public Color Color { get; set; }
-        public Texture2D Texture { get; set; }
+        public Texture2D boundingBoxTexture { get; set; }
         public Vector2 Position { get; set; }
 
         public Block(int x, int y)
@@ -20,12 +20,12 @@ namespace GameDev_Project.GameComponents
             Height = 50;
             BoundingBox = new Rectangle(x, y, Width, Height);
             Color = Color.White;
-            Texture = GameScene.BlockTexture;
+            boundingBoxTexture = GameScene.BlockTexture;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, BoundingBox, new Rectangle(0, 3, Width, Height), Color.White);
+            spriteBatch.Draw(boundingBoxTexture, BoundingBox, new Rectangle(0, 3, Width, Height), Color.White);
         }
 
         public bool Intersects(ICollidable other)

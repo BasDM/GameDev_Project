@@ -16,7 +16,7 @@ namespace GameDev_Project.Characters.Enemies
             enemy = _enemy;
             heartTexture = _content.Load<Texture2D>("heart_16x16");
             heartWidth = _heartWidth;
-            heartPosition = enemy.Position;
+            heartPosition = new Vector2(enemy.Position.X, enemy.BoundingBox.Top - 20);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -28,7 +28,7 @@ namespace GameDev_Project.Characters.Enemies
         }
         public void Update(GameTime gameTime)
         {
-            heartPosition = enemy.Position;
+            heartPosition = new Vector2(enemy.Position.X , enemy.BoundingBox.Top - 20);
         }
     }
 }

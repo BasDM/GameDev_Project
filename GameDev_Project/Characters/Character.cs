@@ -12,10 +12,10 @@ namespace GameDev_Project.Characters
     public abstract class Character : IGameObject, ICollidable
     {
         public IInputReader InputReader;
-        public bool Debug = true;
+        public bool Debug = false;
 
         public Rectangle BoundingBox { get; set; }
-        public Texture2D Texture { get; set; }
+        public Texture2D boundingBoxTexture { get; set; }
         public SpriteEffects horizontalFlip = SpriteEffects.None;
         public Vector2 Position { get; set; } = new Vector2(0, 0);
         public Animation currentAnimation { get; set; }
@@ -79,7 +79,7 @@ namespace GameDev_Project.Characters
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, BoundingBox, Color.White);
+            spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.White);
         }
 
         public bool Intersects(ICollidable other)
