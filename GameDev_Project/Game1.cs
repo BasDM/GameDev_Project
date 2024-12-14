@@ -1,7 +1,9 @@
 ﻿using GameDev_Project.Handlers;
 using GameDev_Project.Scenes;
+using GameDev_Project.Scenes.BeginScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace GameDev_Project
@@ -27,7 +29,8 @@ namespace GameDev_Project
         {
             SceneHandler = new SceneHandler();
             SceneHandler.AddScene(Scenes.SceneType.gameScene, new GameScene(this));
-            SceneHandler.SetScene(SceneType.gameScene);
+            SceneHandler.AddScene(Scenes.SceneType.startMenuScene, new StartMenuScene(this));
+            SceneHandler.SetScene(SceneType.startMenuScene);
             base.Initialize();
         }
 
