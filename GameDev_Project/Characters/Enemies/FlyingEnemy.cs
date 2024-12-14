@@ -13,6 +13,7 @@ namespace GameDev_Project.Characters.Enemies
         private Texture2D _enemyTexture;
         private Animation _flyAnimation;
         private Hero _hero;
+        private Vector2 _direction;
 
         public FlyingEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
         {
@@ -31,7 +32,7 @@ namespace GameDev_Project.Characters.Enemies
             MaxHorizontalSpeed = 2;
             MaxVerticalSpeed = 2;
 
-            Health = 2;
+            Health = 1;
             MaxHealth = Health;
             Dead = false;
             Gravity = 0f; // No gravity
@@ -46,6 +47,10 @@ namespace GameDev_Project.Characters.Enemies
         public override void Update(GameTime gameTime)
         {
             Move();
+            if (Math.Sign(_hero.Position.X - Position.X) < 0)
+                horizontalFlip = SpriteEffects.FlipHorizontally;
+            else
+                horizontalFlip = SpriteEffects.None;
             currentAnimation.Update(gameTime);
         }
 
@@ -54,8 +59,8 @@ namespace GameDev_Project.Characters.Enemies
             float distanceToPlayer = Vector2.Distance(Position, _hero.Position);
             if (distanceToPlayer > _flyRange)
             {
-                Vector2 direction = Vector2.Normalize(_hero.Position - Position);
-                Speed = direction * new Vector2(MaxHorizontalSpeed, MaxVerticalSpeed);
+                _direction = Vector2.Normalize(_hero.Position - Position);
+                Speed = _direction * new Vector2(MaxHorizontalSpeed, MaxVerticalSpeed);
             }
             else
             {
@@ -63,8 +68,8 @@ namespace GameDev_Project.Characters.Enemies
             }
 
             Position += Speed;
-
             BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            base.Move();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -73,7 +78,7 @@ namespace GameDev_Project.Characters.Enemies
             {
                 spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         #region Animations

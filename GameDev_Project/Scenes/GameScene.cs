@@ -127,6 +127,8 @@ namespace GameDev_Project.Scenes
                         Hero.Attack(Enemy);
                     if (Hero.BoundingBox.Intersects(runawayEnemy.BoundingBox))
                         Hero.Attack(runawayEnemy);
+                    if (Hero.BoundingBox.Intersects(flyingEnemy.BoundingBox))
+                        Hero.Attack(flyingEnemy);
                 }
             }
 
