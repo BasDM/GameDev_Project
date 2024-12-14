@@ -20,12 +20,15 @@ namespace GameDev_Project.Scenes
         Texture2D heroTexture;
         Texture2D enemyTexture;
         Texture2D runawayEnemyTexture;
+        Texture2D flyingEnemyTexture;
         public static Hero Hero;
         public static Enemy Enemy;
         public static RunawayEnemy runawayEnemy;
+        public static FlyingEnemy flyingEnemy;
         UserInterface ui;
         EnemyHealthBar enemyHealthBar;
         EnemyHealthBar runawayEnemyHealthBar;
+        EnemyHealthBar flyingEnemyHealthBar;
 
         //Tiles
         List<Block> blocks = new List<Block>();
@@ -67,6 +70,7 @@ namespace GameDev_Project.Scenes
             BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
             enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
             runawayEnemyTexture = game.Content.Load<Texture2D>("Rotbo-Sheet");
+            flyingEnemyTexture = game.Content.Load<Texture2D>("DroneR-Sheet");
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
@@ -76,13 +80,14 @@ namespace GameDev_Project.Scenes
             Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             runawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
-
+            flyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
             CreateBlocks();
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
             enemyHealthBar = new EnemyHealthBar(Enemy, game.Content, 20, 20);
             runawayEnemyHealthBar = new EnemyHealthBar(runawayEnemy, game.Content, 20, 20);
+            flyingEnemyHealthBar = new EnemyHealthBar(flyingEnemy, game.Content, 20, 20);
             Background = new Background();
 
             //Camera and screen
@@ -142,6 +147,8 @@ namespace GameDev_Project.Scenes
             enemyHealthBar.Update(gameTime);
             runawayEnemy.Update(gameTime);
             runawayEnemyHealthBar.Update(gameTime);
+            flyingEnemy.Update(gameTime);
+            flyingEnemyHealthBar.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
         }
@@ -163,6 +170,8 @@ namespace GameDev_Project.Scenes
             enemyHealthBar.Draw(_spriteBatch);
             runawayEnemy.Draw(_spriteBatch);
             runawayEnemyHealthBar.Draw(_spriteBatch);
+            flyingEnemy.Draw(_spriteBatch);
+            flyingEnemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 
