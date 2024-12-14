@@ -1,4 +1,5 @@
 ﻿using GameDev_Project.AnimationLogic;
+using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,14 +13,13 @@ namespace GameDev_Project.Characters.Enemies
     public class RunawayEnemy : Enemy
     {
         private const float _runawayRange = 200.0f;
-        private Animation _idleAnimation;
         private Animation _runAnimation;
         
         public RunawayEnemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero) : base(startPosition, enemyTexture, graphicsDevice, hero)
         {
             _hero = hero;
-            Width = 16;
-            Height = 16;
+            Width = 32;
+            Height = 32;
 
             _enemyTexture = enemyTexture;
             Texture = new Texture2D(graphicsDevice, 1, 1);
@@ -31,23 +31,22 @@ namespace GameDev_Project.Characters.Enemies
             MaxHorizontalSpeed = 2;
             MaxVerticalSpeed = 80;
 
-            Health = 2;
+            Health = 1;
             MaxHealth = Health;
             Dead = false;
             Gravity = 1f;
             BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
 
-            AddIdleAnimation();
             AddRunAnimation();
 
-            currentAnimation = _idleAnimation;
+            currentAnimation = _runAnimation;
         }
-        public void Update()
+        public override void Update(GameTime gameTime)
         {
             Move();
             if (_direction == 0)
             {
-                currentAnimation = _idleAnimation;
+                currentAnimation = _runAnimation;
             }
             else
             {
@@ -57,19 +56,31 @@ namespace GameDev_Project.Characters.Enemies
                 else
                     horizontalFlip = SpriteEffects.None;
             }
+
+            // Update BoundingBox position
+            BoundingBox = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+
+            // Decrement ImmunityTimer
+            if (ImmunityTimer > 0)
+            {
+                ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            currentAnimation.Update(gameTime);
         }
         public override void Move()
         {
             //===Runaway Logic===
-            if (Math.Abs(Position.X - _hero.Position.X) <= _runawayRange)
+            if (Math.Abs(_hero.Position.X - Position.X) <= _runawayRange)
             {
-                _direction = Math.Sign(_hero.Position.X + Position.X);
+                _direction = Math.Sign(Position.X - _hero.Position.X );
                 Speed = new Vector2(_direction * MaxHorizontalSpeed, Speed.Y);
             }
             else
             {
                 Speed = new Vector2(0, Speed.Y);
             }
+
             base.Move();
         }
         public void Draw(SpriteBatch spriteBatch)
@@ -78,18 +89,10 @@ namespace GameDev_Project.Characters.Enemies
             {
                 spriteBatch.Draw(Texture, BoundingBox, Color.Red);
             }
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, 64, 64), currentAnimation.CurrentFrame.SourceRectangle, Color.White,0, new Vector2(0, 0), horizontalFlip,0f);
+            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White,0, new Vector2(0, 0), horizontalFlip,0f);
         }
 
         #region Animations
-        public void AddIdleAnimation()
-        {
-            _idleAnimation = new Animation();
-            for (int i = 0; i < 6; i++)
-            {
-                _idleAnimation.AddFrame(new AnimationFrame(new Rectangle(Width * i, 16, Width, Height)));
-            }
-        }
         public void AddRunAnimation()
         {
             _runAnimation = new Animation();

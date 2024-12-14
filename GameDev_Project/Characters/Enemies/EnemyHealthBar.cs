@@ -6,12 +6,12 @@ namespace GameDev_Project.Characters.Enemies
 {
     public class EnemyHealthBar
     {
-        private Enemy enemy;
+        private Character enemy;
         private int heartWidth;
         private Vector2 heartPosition;
         private Texture2D heartTexture;
 
-        public EnemyHealthBar(Enemy _enemy, ContentManager _content, int _heartWidth, int _heartHeight)
+        public EnemyHealthBar(Character _enemy, ContentManager _content, int _heartWidth, int _heartHeight)
         {
             enemy = _enemy;
             heartTexture = _content.Load<Texture2D>("heart_16x16");

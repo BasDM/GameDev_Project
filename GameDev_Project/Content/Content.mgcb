@@ -85,18 +85,6 @@
 /processorParam:TextureFormat=Color
 /build:heart_16x16.png
 
-#begin mushroom_spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:mushroom_spritesheet.png
-
 #begin music/dark8bitThemesong.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -114,6 +102,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:NightBorne.png
+
+#begin Rotbo-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Rotbo-Sheet.png
 
 #begin Skeleton enemy.png
 /importer:TextureImporter

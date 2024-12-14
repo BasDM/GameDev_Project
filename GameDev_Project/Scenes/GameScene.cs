@@ -66,7 +66,7 @@ namespace GameDev_Project.Scenes
             BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
             BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
             enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
-            runawayEnemyTexture = game.Content.Load<Texture2D>("mushroom_spritesheet");
+            runawayEnemyTexture = game.Content.Load<Texture2D>("Rotbo-Sheet");
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
@@ -117,7 +117,11 @@ namespace GameDev_Project.Scenes
                 {
                     slashEffectInstance.Volume = soundEffectVolume;
                     slashEffectInstance.Play();
-                    Hero.Attack(Enemy);
+
+                    if (Hero.BoundingBox.Intersects(Enemy.BoundingBox))
+                        Hero.Attack(Enemy);
+                    if (Hero.BoundingBox.Intersects(runawayEnemy.BoundingBox))
+                        Hero.Attack(runawayEnemy);
                 }
             }
 
@@ -157,6 +161,7 @@ namespace GameDev_Project.Scenes
             Enemy.Draw(_spriteBatch);
             enemyHealthBar.Draw(_spriteBatch);
             runawayEnemy.Draw(_spriteBatch);
+            runawayEnemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
 
