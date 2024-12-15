@@ -113,7 +113,6 @@ namespace GameDev_Project.Scenes
         {
             if (EnemyHandler.IsEmpty())
             {
-                levelCompleted = true;
                 Debug.WriteLine("Level completed");
             }
             List<Character> toRemove = new List<Character>();
@@ -163,11 +162,12 @@ namespace GameDev_Project.Scenes
             }
 
             Hero.Update(gameTime);
-            Enemy.Update(gameTime);
+            foreach (var enemy in EnemyHandler.Enemies)
+            {
+                enemy.Update(gameTime);
+            }
             enemyHealthBar.Update(gameTime);
-            RunawayEnemy.Update(gameTime);
             runawayEnemyHealthBar.Update(gameTime);
-            FlyingEnemy.Update(gameTime);
             flyingEnemyHealthBar.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
@@ -185,11 +185,12 @@ namespace GameDev_Project.Scenes
                 item.Draw(_spriteBatch);
             }
 
-            Enemy.Draw(_spriteBatch);
+            foreach (var enemy in EnemyHandler.Enemies)
+            {
+                enemy.Draw(_spriteBatch);
+            }
             enemyHealthBar.Draw(_spriteBatch);
-            RunawayEnemy.Draw(_spriteBatch);
             runawayEnemyHealthBar.Draw(_spriteBatch);
-            FlyingEnemy.Draw(_spriteBatch);
             flyingEnemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();

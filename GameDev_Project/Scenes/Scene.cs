@@ -12,7 +12,6 @@ namespace GameDev_Project.Scenes
         public static Enemy Enemy;
         public static FlyingEnemy FlyingEnemy;
         public static RunawayEnemy RunawayEnemy;
-        public bool levelCompleted = false;
 
         public Scene(Game1 game)
         {

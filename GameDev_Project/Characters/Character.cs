@@ -110,7 +110,10 @@ namespace GameDev_Project.Characters
             return v;
         }
 
-        public abstract void Update(GameTime gameTime);
+        public virtual void Update(GameTime gameTime) {
+            if (Health == 0)
+                Dead = true;
+        }
         
         public virtual void Move()
         {

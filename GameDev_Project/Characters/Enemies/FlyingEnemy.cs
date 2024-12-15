@@ -52,6 +52,7 @@ namespace GameDev_Project.Characters.Enemies
             else
                 horizontalFlip = SpriteEffects.None;
             currentAnimation.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public override void Move()

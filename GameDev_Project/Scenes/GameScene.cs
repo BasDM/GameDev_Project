@@ -109,7 +109,7 @@ namespace GameDev_Project.Scenes
         {
             if(EnemyHandler.IsEmpty())
             {
-                levelCompleted = true;
+                game.SceneHandler.SetScene(SceneType.level2);
                 Debug.WriteLine("Level completed");
             }
             List<Character> toRemove = new List<Character>();

@@ -70,6 +70,7 @@ namespace GameDev_Project.Characters.Enemies
             }
 
             currentAnimation.Update(gameTime);
+            base.Update(gameTime);
         }
         public override void Move()
         {

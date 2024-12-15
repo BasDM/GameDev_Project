@@ -94,6 +94,7 @@ namespace GameDev_Project.Characters.Enemies
 
             Attack(Scene.Hero);
             currentAnimation.Update(gameTime);
+            base.Update(gameTime);
         }
 
         #region Animations
