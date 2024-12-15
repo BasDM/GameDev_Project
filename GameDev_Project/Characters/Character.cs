@@ -78,9 +78,12 @@ namespace GameDev_Project.Characters
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.White);
+            if (Debug)
+            {
+                spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
+            }
         }
 
         public bool Intersects(ICollidable other)

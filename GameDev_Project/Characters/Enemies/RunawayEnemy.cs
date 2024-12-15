@@ -86,12 +86,9 @@ namespace GameDev_Project.Characters.Enemies
 
             base.Move();
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Debug)
-            {
-                spriteBatch.Draw(boundingBoxTexture, BoundingBox, Color.Red);
-            }
+            base.Draw(spriteBatch);
             spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White,0, new Vector2(0, 0), horizontalFlip,0f);
         }
 
