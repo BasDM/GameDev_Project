@@ -10,21 +10,23 @@ namespace GameDev_Project.GameComponents
         public int Height { get; set; }
         public int Width { get; set; }
         public Rectangle BoundingBox { get; set; }
-        public Color Color { get; set; }
         public Texture2D boundingBoxTexture { get; set; }
         public Vector2 Position { get; set; }
 
-        public Block(int x, int y)
+        public Block(int x, int y, Texture2D blockTexture)
         {
             Width = 50;
             Height = 50;
             BoundingBox = new Rectangle(x, y, Width, Height);
-            Color = Color.White;
-            boundingBoxTexture = GameScene.BlockTexture;
+            boundingBoxTexture = blockTexture;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
+            if(this is VoidBlock)
+            {
+                this.Draw(spriteBatch);
+            }
             spriteBatch.Draw(boundingBoxTexture, BoundingBox, new Rectangle(0, 3, Width, Height), Color.White);
         }
 

@@ -26,10 +26,10 @@ namespace GameDev_Project.Characters
         private IInputReader _inputReader;
         #endregion
         
-        public Hero(Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
+        public Hero(Vector2 startPosition,Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
             IsOnGround = false;
-            Position = new Vector2(0, 20);
+            Position = startPosition;
             Speed = new Vector2(0, 0);
             Acceleration = new Vector2(0.9f, 0.9f);
             MaxVerticalSpeed = 80;
@@ -79,11 +79,11 @@ namespace GameDev_Project.Characters
                 }
             }
 
-            if (Dead)
+            if (Health == 0)
             {
+                Dead = true;
                 currentAnimation = _deathAnimation;
             }
-
 
             currentAnimation.Update(gameTime);
             BoundingBox = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, Width - 50, Height - 50);
@@ -153,6 +153,7 @@ namespace GameDev_Project.Characters
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
             if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !_isJumping)
             {
+                CheckIfInVoid(verticalCollidables);
                 _isJumping = false;
                 _counter = 0;
                 IsOnGround = true;

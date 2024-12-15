@@ -95,7 +95,7 @@ namespace GameDev_Project.Characters.Enemies
                 ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            Attack(GameScene.Hero);
+            Attack(Scene.Hero);
             currentAnimation.Update(gameTime);
         }
 

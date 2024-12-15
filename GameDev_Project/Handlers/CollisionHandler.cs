@@ -26,7 +26,6 @@ namespace GameDev_Project.Events
 
         public static void RemoveCollidable(ICollidable collidable)
         {
-
             int i = collidableList.IndexOf(collidable);
             if (i >= 0)
             {
@@ -43,5 +42,10 @@ namespace GameDev_Project.Events
             }
         }
 
+        public static void FlushCollidables()
+        {
+            collidableList.Clear();
+            characters.Clear();
+        }
     }
 }

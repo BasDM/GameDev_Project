@@ -47,7 +47,7 @@ namespace GameDev_Project.Characters.Enemies
         public override void Update(GameTime gameTime)
         {
             Move();
-            if (Math.Sign(_hero.Position.X - Position.X) < 0)
+            if (Math.Sign(_hero.Position.X - Position.X) > 0)
                 horizontalFlip = SpriteEffects.FlipHorizontally;
             else
                 horizontalFlip = SpriteEffects.None;

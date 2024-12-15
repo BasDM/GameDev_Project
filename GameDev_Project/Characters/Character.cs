@@ -1,5 +1,6 @@
 ﻿using GameDev_Project.AnimationLogic;
 using GameDev_Project.Events;
+using GameDev_Project.GameComponents;
 using GameDev_Project.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -137,13 +138,23 @@ namespace GameDev_Project.Characters
 
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
             if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top))
+            {
+                CheckIfInVoid(verticalCollidables);
                 verticalMovement = 0;
+            }
             else
                 verticalMovement += Gravity;
 
             // Update speed and position
             Speed = new Vector2(horizontalMovement, verticalMovement);
             Position += Speed;
+        }
+        public void CheckIfInVoid(List<ICollidable> verticalCollidables)
+        {
+            if (verticalCollidables.Any(o => o is VoidBlock))
+            {
+                Health = 0;
+            }
         }
     }
 }

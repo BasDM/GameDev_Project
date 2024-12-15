@@ -1,13 +1,8 @@
-﻿using GameDev_Project.AreaGameComponents;
-using GameDev_Project.UI;
+﻿using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameDev_Project.Scenes.BeginScreen
 {
@@ -19,7 +14,7 @@ namespace GameDev_Project.Scenes.BeginScreen
         private SpriteFont buttonFont;
         public StartMenuScene(Game1 game) : base(game)
         {
-            LoadContent();
+
         }
 
         public override void LoadContent()

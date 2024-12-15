@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System;
 using System.Collections.Generic;
 namespace GameDev_Project.Scenes
 {
@@ -21,10 +22,6 @@ namespace GameDev_Project.Scenes
         Texture2D enemyTexture;
         Texture2D runawayEnemyTexture;
         Texture2D flyingEnemyTexture;
-        public static Hero Hero;
-        public static Enemy Enemy;
-        public static RunawayEnemy runawayEnemy;
-        public static FlyingEnemy flyingEnemy;
         UserInterface ui;
         EnemyHealthBar enemyHealthBar;
         EnemyHealthBar runawayEnemyHealthBar;
@@ -50,17 +47,23 @@ namespace GameDev_Project.Scenes
         //Music
         private Song themeSong;
 
+        //Enemies
+        List<Character> Enemies = new List<Character>();
+
 
         int[,] gameBoard = new int[,]
         {
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-            {0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
+            { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+            { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+            { 0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 }
         };
         public GameScene(Game1 game) : base(game)
         {
-            LoadContent();
+
         }
 
         public override void LoadContent()
@@ -77,17 +80,20 @@ namespace GameDev_Project.Scenes
             slashEffectInstance = slashEffect.CreateInstance();
             themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
 
-            Hero = new Hero(heroTexture, new KeyboardReader(), game.GraphicsDevice);
+            Hero = new Hero(new Vector2(0, 20), heroTexture, new KeyboardReader(), game.GraphicsDevice);
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
-            runawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
-            flyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            blocks = MapFactory.CreateBlocks(this.gameBoard);
+            RunawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
+            FlyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
+            Enemies.Add(Enemy);
+            Enemies.Add(FlyingEnemy);
+            Enemies.Add(RunawayEnemy);
+            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture);
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
             enemyHealthBar = new EnemyHealthBar(Enemy, game.Content, 20, 20);
-            runawayEnemyHealthBar = new EnemyHealthBar(runawayEnemy, game.Content, 20, 20);
-            flyingEnemyHealthBar = new EnemyHealthBar(flyingEnemy, game.Content, 20, 20);
+            runawayEnemyHealthBar = new EnemyHealthBar(RunawayEnemy, game.Content, 20, 20);
+            flyingEnemyHealthBar = new EnemyHealthBar(FlyingEnemy, game.Content, 20, 20);
             Background = new Background();
 
             //Camera and screen
@@ -127,10 +133,10 @@ namespace GameDev_Project.Scenes
 
                     if (Hero.BoundingBox.Intersects(Enemy.BoundingBox))
                         Hero.Attack(Enemy);
-                    if (Hero.BoundingBox.Intersects(runawayEnemy.BoundingBox))
-                        Hero.Attack(runawayEnemy);
-                    if (Hero.BoundingBox.Intersects(flyingEnemy.BoundingBox))
-                        Hero.Attack(flyingEnemy);
+                    if (Hero.BoundingBox.Intersects(RunawayEnemy.BoundingBox))
+                        Hero.Attack(RunawayEnemy);
+                    if (Hero.BoundingBox.Intersects(FlyingEnemy.BoundingBox))
+                        Hero.Attack(FlyingEnemy);
                 }
             }
 
@@ -147,11 +153,12 @@ namespace GameDev_Project.Scenes
             }
 
             Hero.Update(gameTime);
-            Enemy.Update(gameTime);
+            foreach (var enemy in Enemies)
+            {
+                enemy.Update(gameTime);
+            }
             enemyHealthBar.Update(gameTime);
-            runawayEnemy.Update(gameTime);
             runawayEnemyHealthBar.Update(gameTime);
-            flyingEnemy.Update(gameTime);
             flyingEnemyHealthBar.Update(gameTime);
             camera.Follow(Hero.Position, new Rectangle(0, 0, Screen.Width, Screen.Height));
             base.Update(gameTime);
@@ -170,11 +177,12 @@ namespace GameDev_Project.Scenes
                 item.Draw(_spriteBatch);
             }
 
-            Enemy.Draw(_spriteBatch);
+            foreach (var enemy in Enemies)
+            {
+                enemy.Draw(_spriteBatch);
+            }
             enemyHealthBar.Draw(_spriteBatch);
-            runawayEnemy.Draw(_spriteBatch);
             runawayEnemyHealthBar.Draw(_spriteBatch);
-            flyingEnemy.Draw(_spriteBatch);
             flyingEnemyHealthBar.Draw(_spriteBatch);
             Hero.Draw(_spriteBatch);
             _spriteBatch.End();
