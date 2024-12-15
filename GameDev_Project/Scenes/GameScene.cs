@@ -5,6 +5,7 @@ using GameDev_Project.Characters.Enemies;
 using GameDev_Project.Events;
 using GameDev_Project.Factories;
 using GameDev_Project.GameComponents;
+using GameDev_Project.Handlers;
 using GameDev_Project.Input;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
@@ -14,6 +15,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 namespace GameDev_Project.Scenes
 {
     public class GameScene : Scene
@@ -47,9 +49,7 @@ namespace GameDev_Project.Scenes
         //Music
         private Song themeSong;
 
-        //Enemies
-        List<Character> Enemies = new List<Character>();
-
+        private bool levelCompleted = false;
 
         int[,] gameBoard = new int[,]
         {
@@ -84,9 +84,6 @@ namespace GameDev_Project.Scenes
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             RunawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
             FlyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            Enemies.Add(Enemy);
-            Enemies.Add(FlyingEnemy);
-            Enemies.Add(RunawayEnemy);
             blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture);
             CollisionHandler.AddCharacter(Hero);
 
@@ -104,10 +101,27 @@ namespace GameDev_Project.Scenes
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = soundEffectVolume;
             MediaPlayer.Play(themeSong);
+
+            EnemyHandler.AddEnemy(Enemy);
+            EnemyHandler.AddEnemy(FlyingEnemy);
+            EnemyHandler.AddEnemy(RunawayEnemy);
         }
 
         public override void Update(GameTime gameTime)
         {
+            if(EnemyHandler.IsEmpty())
+            {
+                levelCompleted = true;
+                Debug.WriteLine("Level completed");
+            }
+            foreach (var enemy in EnemyHandler.Enemies)
+            {
+                if (enemy.Dead)
+                {
+                    EnemyHandler.RemoveEnemy(enemy);
+                }
+            }
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 game.Exit();
@@ -153,7 +167,7 @@ namespace GameDev_Project.Scenes
             }
 
             Hero.Update(gameTime);
-            foreach (var enemy in Enemies)
+            foreach (var enemy in EnemyHandler.Enemies)
             {
                 enemy.Update(gameTime);
             }
@@ -177,7 +191,7 @@ namespace GameDev_Project.Scenes
                 item.Draw(_spriteBatch);
             }
 
-            foreach (var enemy in Enemies)
+            foreach (var enemy in EnemyHandler.Enemies)
             {
                 enemy.Draw(_spriteBatch);
             }
