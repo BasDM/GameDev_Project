@@ -49,8 +49,6 @@ namespace GameDev_Project.Scenes
         //Music
         private Song themeSong;
 
-        private bool levelCompleted = false;
-
         int[,] gameBoard = new int[,]
         {
             { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
@@ -114,14 +112,14 @@ namespace GameDev_Project.Scenes
                 levelCompleted = true;
                 Debug.WriteLine("Level completed");
             }
+            List<Character> toRemove = new List<Character>();
             foreach (var enemy in EnemyHandler.Enemies)
             {
                 if (enemy.Dead)
-                {
-                    EnemyHandler.RemoveEnemy(enemy);
-                }
+                    toRemove.Add(enemy);
             }
-
+            EnemyHandler.RemoveEnemy(toRemove);
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 game.Exit();
@@ -130,12 +128,6 @@ namespace GameDev_Project.Scenes
             {
                 Hero.ChangeInput(new KeyboardReader());
             }
-
-            //-Optional-
-            //if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            //{
-            //    Hero.ChangeInput(new MouseReader());
-            //}
 
             //Attack sound effect
             if (Keyboard.GetState().IsKeyDown(Keys.Space))

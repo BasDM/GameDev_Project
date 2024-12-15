@@ -15,16 +15,26 @@ namespace GameDev_Project.Handlers
         {
             Enemies.Add(enemy);
         }
-        public static void RemoveEnemy(Character enemy)
+        public static void RemoveEnemy(List<Character> toRemove)
         {
-            Enemies.Remove(enemy);
+            foreach (var enemy in toRemove)
+            {
+                Enemies.Remove(enemy);
+            }
         }
         public static bool IsEmpty()
         {
             if (Enemies.Count != 0)
                 return false;
             else
+            {
+                EnemyHandler.Flush();
                 return true;
+            }
+        }
+        public static void Flush()
+        {
+            Enemies.Clear();
         }
     }
 }

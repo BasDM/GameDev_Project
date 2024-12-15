@@ -5,6 +5,7 @@ using GameDev_Project.Characters.Enemies;
 using GameDev_Project.Events;
 using GameDev_Project.Factories;
 using GameDev_Project.GameComponents;
+using GameDev_Project.Handlers;
 using GameDev_Project.Input;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameDev_Project.Scenes
 {
@@ -101,10 +103,27 @@ namespace GameDev_Project.Scenes
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = soundEffectVolume;
             MediaPlayer.Play(themeSong);
+
+            EnemyHandler.AddEnemy(Enemy);
+            EnemyHandler.AddEnemy(FlyingEnemy);
+            EnemyHandler.AddEnemy(RunawayEnemy);
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (EnemyHandler.IsEmpty())
+            {
+                levelCompleted = true;
+                Debug.WriteLine("Level completed");
+            }
+            List<Character> toRemove = new List<Character>();
+            foreach (var enemy in EnemyHandler.Enemies)
+            {
+                if (enemy.Dead)
+                    toRemove.Add(enemy);
+            }
+            EnemyHandler.RemoveEnemy(toRemove);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 game.Exit();
@@ -113,12 +132,6 @@ namespace GameDev_Project.Scenes
             {
                 Hero.ChangeInput(new KeyboardReader());
             }
-
-            //-Optional-
-            //if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            //{
-            //    Hero.ChangeInput(new MouseReader());
-            //}
 
             //Attack sound effect
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
