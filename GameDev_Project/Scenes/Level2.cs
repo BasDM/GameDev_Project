@@ -72,7 +72,7 @@ namespace GameDev_Project.Scenes
 
             heroTexture = game.Content.Load<Texture2D>("NightBorne");
             BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
-            BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
+            BackgroundTexture = game.Content.Load<Texture2D>("level2Background");
             enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
             runawayEnemyTexture = game.Content.Load<Texture2D>("Rotbo-Sheet");
             flyingEnemyTexture = game.Content.Load<Texture2D>("DroneR-Sheet");
@@ -80,13 +80,13 @@ namespace GameDev_Project.Scenes
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
             slashEffectInstance = slashEffect.CreateInstance();
-            themeSong = game.Content.Load<Song>(@"music\dark8bitThemesong");
+            themeSong = game.Content.Load<Song>(@"music\level2Tune");
 
             Hero = new Hero(new Vector2(0,-100),heroTexture, new KeyboardReader(), game.GraphicsDevice);
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             RunawayEnemy = new RunawayEnemy(new Vector2(1000, 20), runawayEnemyTexture, game.GraphicsDevice, Hero);
             FlyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture);
+            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture, Color.LightGreen);
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));

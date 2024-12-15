@@ -10,7 +10,7 @@ namespace GameDev_Project.GameComponents
 {
     public class VoidBlock : Block
     {
-        public VoidBlock(int x, int y, Texture2D blockTexture) : base(x, y, blockTexture)
+        public VoidBlock(int x, int y, Texture2D blockTexture) : base(x, y, blockTexture, Color.White)
         {
         }
         public override void Draw(SpriteBatch spriteBatch)

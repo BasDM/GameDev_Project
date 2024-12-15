@@ -82,7 +82,7 @@ namespace GameDev_Project.Scenes
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             RunawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
             FlyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture);
+            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture, Color.White);
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));

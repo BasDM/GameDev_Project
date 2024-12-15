@@ -1,5 +1,6 @@
 ﻿using GameDev_Project.Events;
 using GameDev_Project.GameComponents;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace GameDev_Project.Factories
 {
     public class MapFactory
     {
-        public static List<Block> CreateBlocks(int[,] gameBoard, Texture2D blockTexture)
+        public static List<Block> CreateBlocks(int[,] gameBoard, Texture2D blockTexture, Color color)
         {
             List<Block> blocks = new List<Block>();
             for (int l = 0; l < gameBoard.GetLength(0); l++)
@@ -21,7 +22,7 @@ namespace GameDev_Project.Factories
                     int val = gameBoard[l, k];
                     if (val != 0)
                     {
-                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l,blockTexture));
+                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l,blockTexture, color));
                     }
                 }
             }
