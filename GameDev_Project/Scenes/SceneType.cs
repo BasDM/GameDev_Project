@@ -4,6 +4,7 @@
     {
         startMenuScene,
         gameScene,
+        level2,
         deathScene
     }
 }

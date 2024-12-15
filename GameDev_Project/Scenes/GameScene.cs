@@ -81,7 +81,7 @@ namespace GameDev_Project.Scenes
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             runawayEnemy = new RunawayEnemy(new Vector2(1000,20), runawayEnemyTexture, game.GraphicsDevice, Hero);
             flyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            CreateBlocks();
+            blocks = MapFactory.CreateBlocks(this.gameBoard);
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
@@ -184,25 +184,6 @@ namespace GameDev_Project.Scenes
             _spriteBatch.End();
 
             base.Draw(_spriteBatch);
-        }
-        private void CreateBlocks()
-        {
-            for (int l = 0; l < gameBoard.GetLength(0); l++)
-            {
-                for (int k = 0; k < gameBoard.GetLength(1); k++)
-                {
-                    int val = gameBoard[l, k];
-                    if (val != 0)
-                    {
-                        blocks.Add(BlockFactory.CreateBlockWithInt(val, k, l));
-                    }
-                }
-            }
-
-            foreach (var block in blocks)
-            {
-                CollisionHandler.AddCollidable(block);
-            }
         }
     }
 }

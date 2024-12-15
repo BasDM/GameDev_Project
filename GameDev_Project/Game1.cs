@@ -30,6 +30,7 @@ namespace GameDev_Project
             SceneHandler = new SceneHandler();
             SceneHandler.AddScene(Scenes.SceneType.gameScene, new GameScene(this));
             SceneHandler.AddScene(Scenes.SceneType.startMenuScene, new StartMenuScene(this));
+            SceneHandler.AddScene(Scenes.SceneType.level2, new Level2(this));
             SceneHandler.SetScene(SceneType.startMenuScene);
             base.Initialize();
         }
