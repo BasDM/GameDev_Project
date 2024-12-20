@@ -158,6 +158,12 @@
 /processorParam:Quality=Best
 /build:music/level2Tune.mp3
 
+#begin music/VictoryTheme.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/VictoryTheme.mp3
+
 #begin NightBorne.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -211,4 +217,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:StartScreenBackground.png
+
+#begin VictoryBackground.jpeg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:VictoryBackground.jpeg
 

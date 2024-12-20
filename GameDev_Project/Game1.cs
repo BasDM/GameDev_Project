@@ -2,6 +2,7 @@
 using GameDev_Project.Scenes;
 using GameDev_Project.Scenes.BeginScreen;
 using GameDev_Project.Scenes.DeathScreen;
+using GameDev_Project.Scenes.VictoryScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,6 +34,7 @@ namespace GameDev_Project
             SceneHandler.AddScene(Scenes.SceneType.startMenuScene, new StartMenuScene(this));
             SceneHandler.AddScene(Scenes.SceneType.level2, new Level2(this));
             SceneHandler.AddScene(Scenes.SceneType.deathScene, new DeathScene(this));
+            SceneHandler.AddScene(Scenes.SceneType.victoryScene, new VictoryScene(this));
             SceneHandler.SetScene(SceneType.startMenuScene);
             base.Initialize();
         }
