@@ -111,6 +111,11 @@ namespace GameDev_Project.Scenes
 
         public override void Update(GameTime gameTime)
         {
+            if (Hero.Dead)
+            {
+                game.SceneHandler.SetScene(SceneType.deathScene);
+            }
+
             if (EnemyHandler.IsEmpty())
             {
                 Debug.WriteLine("Level completed");

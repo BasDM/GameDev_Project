@@ -1,5 +1,6 @@
 ﻿using GameDev_Project.AnimationLogic;
 using GameDev_Project.Events;
+using GameDev_Project.Handlers;
 using GameDev_Project.Interfaces;
 using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
