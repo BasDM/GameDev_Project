@@ -118,7 +118,7 @@ namespace GameDev_Project.Scenes
 
             if (EnemyHandler.IsEmpty())
             {
-                Debug.WriteLine("Level completed");
+                game.SceneHandler.SetScene(SceneType.victoryScene);
             }
             List<Character> toRemove = new List<Character>();
             foreach (var enemy in EnemyHandler.Enemies)
