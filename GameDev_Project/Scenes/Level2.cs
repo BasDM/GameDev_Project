@@ -113,11 +113,13 @@ namespace GameDev_Project.Scenes
         {
             if (Hero.Dead)
             {
+                CollisionHandler.FlushCollidables();
                 game.SceneHandler.SetScene(SceneType.deathScene);
             }
 
             if (EnemyHandler.IsEmpty())
             {
+                CollisionHandler.FlushCollidables();
                 game.SceneHandler.SetScene(SceneType.victoryScene);
             }
             List<Character> toRemove = new List<Character>();
@@ -205,10 +207,6 @@ namespace GameDev_Project.Scenes
             _spriteBatch.End();
 
             base.Draw(_spriteBatch);
-        }
-        private void unloadPreviousContent()
-        {
-            CollisionHandler.FlushCollidables();
         }
     }
 }

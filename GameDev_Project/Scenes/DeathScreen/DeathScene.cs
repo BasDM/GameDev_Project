@@ -1,4 +1,6 @@
-﻿using GameDev_Project.Scenes.BeginScreen;
+﻿using GameDev_Project.Events;
+using GameDev_Project.Handlers;
+using GameDev_Project.Scenes.BeginScreen;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -28,6 +30,8 @@ namespace GameDev_Project.Scenes.DeathScreen
 
         public override void LoadContent()
         {
+            unloadPreviousContent();
+
             BackgroundTexture = game.Content.Load<Texture2D>("DefeatedBackground");
             themeSong = game.Content.Load<Song>(@"music\GameOver");
             Screen = new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
@@ -36,6 +40,7 @@ namespace GameDev_Project.Scenes.DeathScreen
             buttonFont = game.Content.Load<SpriteFont>(@"Fonts\CustomFont");
             buttons.Add(new Button(playButtonTexture, 0, 0, new Vector2(Screen.Width / 4, Screen.Height / 2), "Try again", buttonFont, () =>
             {
+                EnemyHandler.Flush();
                 game.SceneHandler.SetScene(SceneType.gameScene);
             }));
 

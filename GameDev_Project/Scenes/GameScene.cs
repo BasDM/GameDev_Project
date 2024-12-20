@@ -66,6 +66,8 @@ namespace GameDev_Project.Scenes
 
         public override void LoadContent()
         {
+            unloadPreviousContent();
+
             heroTexture = game.Content.Load<Texture2D>("NightBorne");
             BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
             BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
@@ -108,8 +110,11 @@ namespace GameDev_Project.Scenes
         public override void Update(GameTime gameTime)
         {
             if (Hero.Dead)
+            {
+                CollisionHandler.FlushCollidables();
                 game.SceneHandler.SetScene(SceneType.deathScene);
-
+            }
+                
             if(EnemyHandler.IsEmpty())
             {
                 game.SceneHandler.SetScene(SceneType.level2);

@@ -1,4 +1,5 @@
-﻿using GameDev_Project.UI;
+﻿using GameDev_Project.Events;
+using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,6 +24,8 @@ namespace GameDev_Project.Scenes.VictoryScreen
         }
         public override void LoadContent()
         {
+            unloadPreviousContent();
+
             BackgroundTexture = game.Content.Load<Texture2D>("VictoryBackground");
             themeSong = game.Content.Load<Song>(@"music\VictoryTheme");
             Screen = new Rectangle(0, 0, game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);

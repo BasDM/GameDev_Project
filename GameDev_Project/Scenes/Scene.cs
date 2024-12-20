@@ -1,5 +1,7 @@
 ﻿using GameDev_Project.Characters;
 using GameDev_Project.Characters.Enemies;
+using GameDev_Project.Events;
+using GameDev_Project.Handlers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,6 +23,10 @@ namespace GameDev_Project.Scenes
         public virtual void LoadContent() { }
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch) { }
+        public void unloadPreviousContent()
+        {
+            CollisionHandler.FlushCollidables();
+        }
 
     }
 }
