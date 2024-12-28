@@ -12,6 +12,7 @@ namespace GameDev_Project.Managers
         public Texture2D enemyTexture;
         public Texture2D runawayEnemyTexture;
         public Texture2D flyingEnemyTexture;
+        public Texture2D coinTexture;
         public TextureManager(Game1 game)
         {
             _game = game;
@@ -26,6 +27,7 @@ namespace GameDev_Project.Managers
            enemyTexture = _game.Content.Load<Texture2D>("Skeleton enemy");
            runawayEnemyTexture = _game.Content.Load<Texture2D>("Rotbo-Sheet");
            flyingEnemyTexture = _game.Content.Load<Texture2D>("DroneR-Sheet");
+           coinTexture = _game.Content.Load<Texture2D>("skullCoin");
         }
     }
 }

@@ -28,6 +28,8 @@ namespace GameDev_Project.Characters
 
         private float _flashTimer = 0.1f; // Time interval for flashing
         private bool _isVisible = true; // Visibility state
+
+        public int _coinsCollected = 0;
         #endregion
 
         public Hero(Vector2 startPosition,Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
@@ -216,6 +218,16 @@ namespace GameDev_Project.Characters
         public bool Intersects(IGameObject other)
         {
             return BoundingBox.Intersects(other.BoundingBox);
+        }
+
+        public void CollectCoin()
+        {
+            _coinsCollected++;
+            if(_coinsCollected == 10)
+            {
+                _coinsCollected = 0;
+                Health = Math.Min(Health + 1, MaxHealth); //restore a heart
+            }
         }
 
         #region Animations
