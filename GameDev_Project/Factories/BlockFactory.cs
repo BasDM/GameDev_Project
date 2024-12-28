@@ -8,7 +8,7 @@ namespace GameDev_Project.Factories
 {
     public class BlockFactory
     {
-        public static Block CreateBlockWithInt(int type, int x, int y,Texture2D texture, Color color) {
+        public static Block CreateBlockWithInt(int type, int x, int y,Texture2D texture, Texture2D coinTexture, Color color) {
             Block newBlock = null;
             switch (type)
             {
@@ -16,6 +16,9 @@ namespace GameDev_Project.Factories
                     break;
                 case 1:
                     newBlock = new Block(x*50, y*50, texture, color);
+                    break;
+                case 2:
+                    newBlock = new CoinBlock(x * 50, y * 50, coinTexture, color);
                     break;
                 case 9:
                     newBlock = new VoidBlock(x * 50, y * 50, texture);

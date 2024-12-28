@@ -7,8 +7,8 @@ namespace GameDev_Project.Events
 {
     public static class CollisionHandler
     {
-        private static List<ICollidable> collidableList = new List<ICollidable>();
-        private static List<Character> characters = new List<Character>();
+        public static List<ICollidable> collidableList = new List<ICollidable>();
+        public static List<Character> characters = new List<Character>();
 
         public static List<ICollidable>? CollidingWithObject(Rectangle boundingBoxToCheck)
         {

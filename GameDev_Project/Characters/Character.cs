@@ -132,7 +132,7 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> horizontalCollidables = CollisionHandler.CollidingWithObject(futureHorizontalBoundingBox);
-            if (horizontalCollidables.Any(o => futureHorizontalBoundingBox.Intersects(o.BoundingBox)))
+            if (horizontalCollidables.Any(o => futureHorizontalBoundingBox.Intersects(o.BoundingBox) && !(o is CoinBlock)))
             {
                 horizontalMovement = 0;
             }
@@ -146,7 +146,7 @@ namespace GameDev_Project.Characters
             );
 
             List<ICollidable> verticalCollidables = CollisionHandler.CollidingWithObject(futureVerticalBoundingBox);
-            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top))
+            if (verticalCollidables.Any(o => futureVerticalBoundingBox.Intersects(o.BoundingBox) && Position.Y <= o.BoundingBox.Top && !(o is CoinBlock)))
             {
                 CheckIfInVoid(verticalCollidables);
                 verticalMovement = 0;

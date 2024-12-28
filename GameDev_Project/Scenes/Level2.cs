@@ -25,6 +25,7 @@ namespace GameDev_Project.Scenes
         Texture2D enemyTexture;
         Texture2D runawayEnemyTexture;
         Texture2D flyingEnemyTexture;
+        Texture2D coinTexture;
         UserInterface ui;
         EnemyHealthBar enemyHealthBar;
         EnemyHealthBar runawayEnemyHealthBar;
@@ -80,6 +81,7 @@ namespace GameDev_Project.Scenes
             enemyTexture = textureManager.enemyTexture;
             runawayEnemyTexture = textureManager.runawayEnemyTexture;
             flyingEnemyTexture = textureManager.flyingEnemyTexture;
+            coinTexture = textureManager.coinTexture;
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
@@ -90,7 +92,7 @@ namespace GameDev_Project.Scenes
             Enemy = new Enemy(new Vector2(400, 20), enemyTexture, game.GraphicsDevice, Hero);
             RunawayEnemy = new RunawayEnemy(new Vector2(1000, 20), runawayEnemyTexture, game.GraphicsDevice, Hero);
             FlyingEnemy = new FlyingEnemy(new Vector2(1200, 20), flyingEnemyTexture, game.GraphicsDevice, Hero);
-            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture, Color.LightGreen);
+            blocks = MapFactory.CreateBlocks(this.gameBoard, BlockTexture,coinTexture, Color.LightGreen);
             CollisionHandler.AddCharacter(Hero);
 
             ui = new UserInterface(Hero, game.Content, 20, 20, new Vector2(10, 10));
@@ -191,9 +193,18 @@ namespace GameDev_Project.Scenes
 
             _spriteBatch.Begin(transformMatrix: cameraTransform, samplerState: SamplerState.PointClamp);
             Background.Draw(_spriteBatch, BackgroundTexture, camera.Position, Screen);
-            foreach (var item in blocks)
+            foreach (var item in CollisionHandler.collidableList)
             {
-                item.Draw(_spriteBatch);
+                if (item is Block)
+                {
+                    var block = item as Block;
+                    block.Draw(_spriteBatch);
+                }
+                if (item is CoinBlock)
+                {
+                    var coin = item as CoinBlock;
+                    coin.Draw(_spriteBatch);
+                }
             }
 
             foreach (var enemy in EnemyHandler.Enemies)

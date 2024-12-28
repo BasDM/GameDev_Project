@@ -1,5 +1,6 @@
 ﻿using GameDev_Project.AnimationLogic;
 using GameDev_Project.Events;
+using GameDev_Project.GameComponents;
 using GameDev_Project.Handlers;
 using GameDev_Project.Interfaces;
 using GameDev_Project.Scenes;
@@ -158,6 +159,7 @@ namespace GameDev_Project.Characters
             if (horizontalCollidables.Any(o => BoundingBox.Left <= o.BoundingBox.Right || BoundingBox.Right >= o.BoundingBox.Left))
             {
                 // Stop horizontal movement only
+                CheckIfCoin(horizontalCollidables);
                 horizontalMovement = 0;
                 Speed = new Vector2(horizontalMovement, Speed.Y);
             }
@@ -175,6 +177,7 @@ namespace GameDev_Project.Characters
             if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !_isJumping)
             {
                 CheckIfInVoid(verticalCollidables);
+                CheckIfCoin(verticalCollidables);
                 _isJumping = false;
                 _counter = 0;
                 IsOnGround = true;
@@ -182,6 +185,7 @@ namespace GameDev_Project.Characters
             }
             else if(verticalCollidables.Any(o => BoundingBox.Top >= o.BoundingBox.Bottom))
             {
+                CheckIfCoin(verticalCollidables);
                 _isJumping = false;
                 _counter = 0;
                 IsOnGround = false;
@@ -227,6 +231,21 @@ namespace GameDev_Project.Characters
             {
                 _coinsCollected = 0;
                 Health = Math.Min(Health + 1, MaxHealth); //restore a heart
+            }
+        }
+
+        public void CheckIfCoin(List<ICollidable> collidables)
+        {
+            foreach (var item in collidables)
+            {
+                if(item is CoinBlock)
+                {
+                    var coin = item as CoinBlock;
+                    coin.collected = true;
+                    CollectCoin();
+                    CollisionHandler.RemoveCollidable(item);
+                    break;
+                }
             }
         }
 
