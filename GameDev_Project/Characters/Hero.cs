@@ -25,8 +25,11 @@ namespace GameDev_Project.Characters
         private bool _isJumping = false;
 
         private IInputReader _inputReader;
+
+        private float _flashTimer = 0.1f; // Time interval for flashing
+        private bool _isVisible = true; // Visibility state
         #endregion
-        
+
         public Hero(Vector2 startPosition,Texture2D texture, IInputReader inputReader, GraphicsDevice graphicsDevice)
         {
             IsOnGround = false;
@@ -62,6 +65,21 @@ namespace GameDev_Project.Characters
             if(ImmunityTimer > 0)
             {
                 ImmunityTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (IsFlashing)
+                {
+                    _flashTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if(_flashTimer <= 0)
+                    {
+                        _isVisible = !_isVisible;
+                        _flashTimer = 0.1f;
+                    }
+                }
+            }
+            else
+            {
+                _isVisible = true;
+                IsFlashing = false;
             }
 
             Move();
@@ -183,8 +201,11 @@ namespace GameDev_Project.Characters
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
-            spriteBatch.Draw(_heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            if (_isVisible)
+            {
+                base.Draw(spriteBatch);
+                spriteBatch.Draw(_heroTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            }
         }
 
         public void ChangeInput(IInputReader inputReader)

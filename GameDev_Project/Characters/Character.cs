@@ -45,6 +45,8 @@ namespace GameDev_Project.Characters
 
         public float ImmunityTimer { get; set; } = 0f;
 
+        public bool IsFlashing { get; set; } = false;
+
         public Character()
         {
             //make health 1 and maxHealth refer to health so I only need to change 1 value
@@ -63,6 +65,7 @@ namespace GameDev_Project.Characters
 
             Health -= damage;
             ImmunityTimer = 2f; // Start immunity timer
+            IsFlashing = true; //When in this function, player gets hit so he starts flashing
 
             if (Health <= 0)
             {

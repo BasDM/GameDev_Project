@@ -73,12 +73,12 @@ namespace GameDev_Project.Scenes
             unloadPreviousContent();
 
             //Set every texture to texture of texturemanager
-            heroTexture = textureManager._heroTexture;
-            BlockTexture = textureManager._blockTexture;
-            BackgroundTexture = textureManager._backgroundTexture;
-            enemyTexture = textureManager._enemyTexture;
-            runawayEnemyTexture = textureManager._runawayEnemyTexture;
-            flyingEnemyTexture = textureManager._flyingEnemyTexture;
+            heroTexture = textureManager.heroTexture;
+            BlockTexture = textureManager.blockTexture;
+            BackgroundTexture = textureManager.levelOneBackgroundTexture;
+            enemyTexture = textureManager.enemyTexture;
+            runawayEnemyTexture = textureManager.runawayEnemyTexture;
+            flyingEnemyTexture = textureManager.flyingEnemyTexture;
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
