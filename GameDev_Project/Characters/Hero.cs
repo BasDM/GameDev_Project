@@ -159,7 +159,8 @@ namespace GameDev_Project.Characters
             if (horizontalCollidables.Any(o => BoundingBox.Left <= o.BoundingBox.Right || BoundingBox.Right >= o.BoundingBox.Left))
             {
                 // Stop horizontal movement only
-                CheckIfCoin(horizontalCollidables);
+                if (CheckIfCoin(horizontalCollidables))
+                    return;
                 horizontalMovement = 0;
                 Speed = new Vector2(horizontalMovement, Speed.Y);
             }
@@ -177,7 +178,8 @@ namespace GameDev_Project.Characters
             if (verticalCollidables.Any(o => BoundingBox.Bottom <= o.BoundingBox.Top) && !_isJumping)
             {
                 CheckIfInVoid(verticalCollidables);
-                CheckIfCoin(verticalCollidables);
+                if (CheckIfCoin(verticalCollidables))
+                    return;
                 _isJumping = false;
                 _counter = 0;
                 IsOnGround = true;
@@ -185,7 +187,8 @@ namespace GameDev_Project.Characters
             }
             else if(verticalCollidables.Any(o => BoundingBox.Top >= o.BoundingBox.Bottom))
             {
-                CheckIfCoin(verticalCollidables);
+                if (CheckIfCoin(verticalCollidables))
+                    return;
                 _isJumping = false;
                 _counter = 0;
                 IsOnGround = false;
@@ -234,7 +237,7 @@ namespace GameDev_Project.Characters
             }
         }
 
-        public void CheckIfCoin(List<ICollidable> collidables)
+        public bool CheckIfCoin(List<ICollidable> collidables)
         {
             foreach (var item in collidables)
             {
@@ -244,9 +247,11 @@ namespace GameDev_Project.Characters
                     coin.collected = true;
                     CollectCoin();
                     CollisionHandler.RemoveCollidable(item);
-                    break;
+                    return true;
                 }
+                return false;
             }
+            return false;
         }
 
         #region Animations

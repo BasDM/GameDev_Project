@@ -12,7 +12,7 @@ namespace GameDev_Project.GameComponents
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(boundingBoxTexture, new Rectangle(BoundingBox.X, BoundingBox.Y, 15, 15), Color.White);
+            spriteBatch.Draw(boundingBoxTexture, new Rectangle(BoundingBox.Center.X, BoundingBox.Center.Y, 15, 15), Color.White);
         }
     }
 }
