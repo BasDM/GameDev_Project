@@ -7,6 +7,7 @@ using GameDev_Project.Factories;
 using GameDev_Project.GameComponents;
 using GameDev_Project.Handlers;
 using GameDev_Project.Input;
+using GameDev_Project.Managers;
 using GameDev_Project.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -59,21 +60,25 @@ namespace GameDev_Project.Scenes
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
             { 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 }
         };
+
+        //TextureManager
+        private TextureManager textureManager;
         public GameScene(Game1 game) : base(game)
         {
-
+            textureManager = new TextureManager(game);
         }
 
         public override void LoadContent()
         {
             unloadPreviousContent();
 
-            heroTexture = game.Content.Load<Texture2D>("NightBorne");
-            BlockTexture = game.Content.Load<Texture2D>("[64x64] Dungeon Bricks Plain");
-            BackgroundTexture = game.Content.Load<Texture2D>("crystal_cave_background");
-            enemyTexture = game.Content.Load<Texture2D>("Skeleton enemy");
-            runawayEnemyTexture = game.Content.Load<Texture2D>("Rotbo-Sheet");
-            flyingEnemyTexture = game.Content.Load<Texture2D>("DroneR-Sheet");
+            //Set every texture to texture of texturemanager
+            heroTexture = textureManager._heroTexture;
+            BlockTexture = textureManager._blockTexture;
+            BackgroundTexture = textureManager._backgroundTexture;
+            enemyTexture = textureManager._enemyTexture;
+            runawayEnemyTexture = textureManager._runawayEnemyTexture;
+            flyingEnemyTexture = textureManager._flyingEnemyTexture;
 
             //Sounds
             slashEffect = game.Content.Load<SoundEffect>(@"sounds\sword-slash-and-swing-185432");
