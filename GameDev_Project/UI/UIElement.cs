@@ -1,10 +1,5 @@
-﻿using GameDev_Project.Characters;
-using GameDev_Project.Interfaces;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 namespace GameDev_Project.UI
 {
     public class UIElement

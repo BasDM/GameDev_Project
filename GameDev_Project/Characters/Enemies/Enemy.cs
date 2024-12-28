@@ -9,23 +9,23 @@ namespace GameDev_Project.Characters.Enemies
 {
     public class Enemy : Character, IGameObject
     {
-        public Hero _hero;
+        public Hero hero;
         private const float _followRange = 300.0f;
-        public Texture2D _enemyTexture;
+        public Texture2D enemyTexture;
 
         private Animation _idleAnimation;
         private Animation _walkingAnimation;
 
-        public float _direction;
+        public float direction;
 
         public Enemy(Vector2 startPosition, Texture2D enemyTexture, GraphicsDevice graphicsDevice, Hero hero)
         {
-            _hero = hero;
+            this.hero = hero;
 
             Width = 64;
             Height = 64;
 
-            _enemyTexture = enemyTexture;
+            this.enemyTexture = enemyTexture;
             boundingBoxTexture = new Texture2D(graphicsDevice, 1, 1);
             boundingBoxTexture.SetData(new[] { Color.White });
             Position = startPosition;
@@ -49,10 +49,10 @@ namespace GameDev_Project.Characters.Enemies
         public override void Move()
         {
             //===Follow logic===
-            if (Math.Abs(Position.X - _hero.Position.X) <= _followRange)
+            if (Math.Abs(Position.X - hero.Position.X) <= _followRange)
             {
-                _direction = Math.Sign(_hero.Position.X - Position.X); // -1 for left, +1 for right
-                Speed = new Vector2(_direction * MaxHorizontalSpeed, Speed.Y);
+                direction = Math.Sign(hero.Position.X - Position.X); // -1 for left, +1 for right
+                Speed = new Vector2(direction * MaxHorizontalSpeed, Speed.Y);
             }
             else
             {
@@ -64,20 +64,20 @@ namespace GameDev_Project.Characters.Enemies
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.Draw(_enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
+            spriteBatch.Draw(enemyTexture, new Rectangle((int)Position.X, (int)Position.Y, Width, Height), currentAnimation.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), horizontalFlip, 0f);
         }
 
         public override void Update(GameTime gameTime)
         {
             Move();
-            if (_direction == 0)
+            if (direction == 0)
             {
                 currentAnimation = _idleAnimation;
             }
             else
             {
                 currentAnimation = _walkingAnimation;
-                if (_direction == -1)
+                if (direction == -1)
                     horizontalFlip = SpriteEffects.FlipHorizontally;
                 else
                     horizontalFlip = SpriteEffects.None;

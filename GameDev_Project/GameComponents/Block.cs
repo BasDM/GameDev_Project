@@ -1,5 +1,4 @@
 ﻿using GameDev_Project.Interfaces;
-using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -25,10 +24,6 @@ namespace GameDev_Project.GameComponents
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if(this is VoidBlock)
-            {
-                this.Draw(spriteBatch);
-            }
             spriteBatch.Draw(boundingBoxTexture, BoundingBox, new Rectangle(0, 3, Width, Height), Color);
         }
 

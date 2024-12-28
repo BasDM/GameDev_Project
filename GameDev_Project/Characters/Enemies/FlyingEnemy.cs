@@ -1,5 +1,4 @@
 ﻿using GameDev_Project.AnimationLogic;
-using GameDev_Project.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

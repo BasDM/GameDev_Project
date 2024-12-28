@@ -1,8 +1,6 @@
 ﻿using GameDev_Project.GameComponents;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using GameDev_Project.Factories;
-using Microsoft.Xna.Framework.Content;
 
 namespace GameDev_Project.Factories
 {
