@@ -230,9 +230,8 @@ namespace GameDev_Project.Characters
         public void CollectCoin()
         {
             _coinsCollected++;
-            if(_coinsCollected == 10)
+            if(_coinsCollected % 10 == 0)
             {
-                _coinsCollected = 0;
                 Health = Math.Min(Health + 1, MaxHealth); //restore a heart
             }
         }
